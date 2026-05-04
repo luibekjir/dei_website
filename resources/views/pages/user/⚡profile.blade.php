@@ -13,6 +13,8 @@ new #[Title('User Profile')] class extends Component {
     }
 }; ?>
 
+     <!-- NOTE : kalau mau akses Profileuser pake http://dei_website.test/ProfileUser# -->
+
 <div class="min-h-screen bg-[#FFF8F0] -m-6">
     <div class="flex">
         <aside class="w-64 min-h-screen bg-zinc-100 shadow-sm">
