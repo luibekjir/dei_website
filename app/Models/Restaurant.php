@@ -10,12 +10,17 @@ class Restaurant extends Model
     protected $fillable = [
         'name',
         'budget_range',
-        'category',
+        'category_id',
         'description',
         'image',
         'address',
         'rating',
     ];
+
+    public function category() 
+    {
+        return $this->belongsTo(Category::class); 
+    }
 
     public function menus()
     {

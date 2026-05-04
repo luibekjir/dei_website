@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('budget_range'); // $, $$, $$$
-            $table->string('category'); // Japanese, Italian, Vegan, dll
+            $table->foreignId('category_id') ->constrained() ->onDelete('cascade');
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->text('address');
