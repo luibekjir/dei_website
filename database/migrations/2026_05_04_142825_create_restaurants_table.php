@@ -12,12 +12,11 @@ return new class extends Migration
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('budget_range'); // $, $$, $$$
-            $table->foreignId('category_id') ->constrained() ->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->text('address');
-            $table->decimal('rating', 2, 1)->default(0.0); // contoh 4.8
+            $table->decimal('rating', 2, 1)->default(0);
             $table->timestamps();
         });
     }
