@@ -27,10 +27,13 @@
             </nav>
         </div>
 
-        <!-- RIGHT: Login Button -->
-        <div>
-            <a href="{{ route('login') }}"
-                class="px-5 py-2 rounded-full bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition">
+        <!-- RIGHT: Search and Login -->
+        <div class="flex items-center gap-3">
+            <button class="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 text-zinc-600 hover:border-zinc-300 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+            </button>
+            <a href="#"
+                class="px-5 py-2 rounded-full bg-[#7A4900] text-white text-sm font-medium hover:bg-[#603900] transition">
                 Login
             </a>
         </div>
