@@ -109,7 +109,7 @@
                     <div>
                         <h1 class="text-5xl font-bold">Curated for your palate</h1>
                         <p class="text-gray-500 mt-2">
-                            Showing {{ $restaurants->count() }} curated restaurant results
+                            Showing {{ $menus->count() }} curated menu results
                         </p>
                     </div>
 
@@ -123,7 +123,7 @@
                                 type="search" 
                                 name="search"
                                 value="{{ request('search') }}"
-                                placeholder="Search restaurants, cuisines..." 
+                                placeholder="Search menus, restaurants..." 
                                 class="w-full px-4 py-3 text-sm border border-zinc-200 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                             />
                         </form>
@@ -138,61 +138,66 @@
                     </div>
                 </div>
 
-                <!-- Restaurant Cards -->
+                <!-- Menu Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-                    @forelse($restaurants as $restaurant)
-                        <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm">
+                    @forelse($menus as $menu)
+                    <a href="{{ route('restaurant.show', $menu->restaurant->id) }}">
+                        <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
 
                             <!-- Image -->
-                            <div class="h-56 bg-neutral-200 overflow-hidden">
-                                @if($restaurant->image)
+                            <div class="h-48 bg-neutral-100 overflow-hidden relative">
+                                @if($menu->image)
                                     <img
-                                        src="{{ asset('storage/' . $restaurant->image) }}"
-                                        alt="{{ $restaurant->name }}"
+                                        src="{{ asset('storage/' . $menu->image) }}"
+                                        alt="{{ $menu->name }}"
                                         class="w-full h-full object-cover"
                                     >
                                 @else
-                                    <div class="w-full h-full bg-neutral-200"></div>
+                                    <div class="w-full h-full flex items-center justify-center bg-zinc-50 text-zinc-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
                                 @endif
+                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold text-orange-600 shadow-sm">
+                                    ⭐ {{ number_format($menu->rating, 1) }}
+                                </div>
                             </div>
 
                             <!-- Content -->
-                            <div class="p-5">
-
-                                <span class="inline-block px-3 py-1 text-xs rounded-full bg-[#F5E6D3] text-[#A65D1B] mb-3">
-                                    {{ $restaurant->category->name }}
-                                </span>
-
-                                <h3 class="text-2xl font-semibold">
-                                    {{ $restaurant->name }}
-                                </h3>
-
-                                <p class="text-gray-500 mt-2 text-sm line-clamp-2">
-                                    {{ $restaurant->description }}
-                                </p>
-
-                                <div class="flex justify-between items-center mt-5 text-sm">
-                                    <span class="font-semibold text-[#E67E22]">
-                                        {{ $restaurant->budget_range }}
+                            <div class="p-5 flex-1 flex flex-col">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="inline-block px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold rounded bg-orange-50 text-orange-700">
+                                        {{ $menu->restaurant->category->name }}
                                     </span>
-
-                                    <span class="text-gray-500">
-                                        ⭐ {{ number_format($restaurant->rating, 1) }}
+                                    <span class="font-bold text-zinc-900">
+                                        ${{ number_format($menu->price, 2) }}
                                     </span>
                                 </div>
 
-                                <p class="text-xs text-gray-400 mt-3">
-                                    {{ $restaurant->address }}
+                                <h3 class="text-xl font-bold text-zinc-800 leading-tight">
+                                    {{ $menu->name }}
+                                </h3>
+
+                                <p class="text-zinc-500 mt-2 text-sm line-clamp-2 flex-1">
+                                    {{ $menu->description }}
                                 </p>
 
+                                <div class="mt-4 pt-4 border-t border-zinc-100 flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-zinc-200 flex-shrink-0"></div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-zinc-900 truncate">{{ $menu->restaurant->name }}</p>
+                                        <p class="text-[10px] text-zinc-400 truncate">{{ $menu->restaurant->address }}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
+                    </a>
                     @empty
                         <div class="col-span-full text-center py-20">
                             <h3 class="text-2xl font-semibold">
-                                No restaurants found
+                                No menus found
                             </h3>
                             <p class="text-gray-500 mt-2">
                                 Try adjusting your filters
@@ -232,8 +237,8 @@
         let routeLine = null;
         const markerGroup = L.featureGroup().addTo(map);
         
-        // Load restaurant data from existing collection
-        const restaurants = @json($restaurants);
+        // Load menu data from existing collection
+        const menus = @json($menus);
 
         // Define a custom orange icon
         const restaurantIcon = L.divIcon({
@@ -252,19 +257,20 @@
                 const userMarker = L.marker(userLocation).addTo(map)
                     .bindPopup('<b>You are here</b>');
                 
-                // Display restaurant markers
-                restaurants.forEach(restaurant => {
+                // Display menu markers (based on restaurant location)
+                menus.forEach(menu => {
+                    const restaurant = menu.restaurant;
                     const lat = restaurant.latitude ? parseFloat(restaurant.latitude) : (userLocation[0] + (Math.random() - 0.5) * 0.04);
                     const lng = restaurant.longitude ? parseFloat(restaurant.longitude) : (userLocation[1] + (Math.random() - 0.5) * 0.04);
                     
-                    restaurant.lat = lat;
-                    restaurant.lng = lng;
+                    menu.lat = lat;
+                    menu.lng = lng;
 
-                    addRestaurantMarker(restaurant);
+                    addMenuMarker(menu);
                 });
 
-                // Zoom to fit user and all restaurants
-                if (restaurants.length > 0) {
+                // Zoom to fit user and all menus
+                if (menus.length > 0) {
                     const bounds = markerGroup.getBounds();
                     bounds.extend(userLocation);
                     map.fitBounds(bounds, { padding: [50, 50] });
@@ -276,33 +282,43 @@
 
             }, error => {
                 console.error("Error getting location: ", error);
-                // Fallback: If geolocation fails, just show restaurants
-                restaurants.forEach(restaurant => {
+                // Fallback: If geolocation fails, just show menus
+                menus.forEach(menu => {
+                    const restaurant = menu.restaurant;
                     if (restaurant.latitude && restaurant.longitude) {
-                        restaurant.lat = parseFloat(restaurant.latitude);
-                        restaurant.lng = parseFloat(restaurant.longitude);
-                        addRestaurantMarker(restaurant);
+                        menu.lat = parseFloat(restaurant.latitude);
+                        menu.lng = parseFloat(restaurant.longitude);
+                        addMenuMarker(menu);
                     }
                 });
-                if (restaurants.length > 0) {
+                if (menus.length > 0) {
                     map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
                 }
             });
         }
 
-        function addRestaurantMarker(restaurant) {
-            const marker = L.marker([restaurant.lat, restaurant.lng], { icon: restaurantIcon }).addTo(markerGroup);
+        function addMenuMarker(menu) {
+            const marker = L.marker([menu.lat, menu.lng], { icon: restaurantIcon }).addTo(markerGroup);
             
-            // Show name on hover
-            marker.bindTooltip(restaurant.name, { permanent: false, direction: 'top' });
+            // Show menu name and restaurant name on hover
+            marker.bindTooltip(`<b>${menu.name}</b><br>${menu.restaurant.name}`, { permanent: false, direction: 'top' });
             
             // Show details on click
-            marker.bindPopup(`<b>${restaurant.name}</b><br><span style="font-size: 12px; color: #666;">${restaurant.address}</span>`);
+            marker.bindPopup(`
+                <div style="min-width: 150px;">
+                    <b style="font-size: 14px;">${menu.name}</b><br>
+                    <span style="font-size: 12px; color: #E67E22; font-weight: bold;">$${parseFloat(menu.price).toFixed(2)}</span><br>
+                    <span style="font-size: 11px; color: #666;">at ${menu.restaurant.name}</span><br>
+                    <div class="mt-2 pt-2 border-t border-zinc-100">
+                        <a href="/restaurant/${menu.restaurant.id}" style="color: #E67E22; font-weight: bold; text-decoration: none; font-size: 11px;">View Menu Details →</a>
+                    </div>
+                </div>
+            `);
             
             // Draw route on click
             marker.on('click', function() {
                 if (userLocation) {
-                    drawRoute(restaurant.lat, restaurant.lng);
+                    drawRoute(menu.lat, menu.lng);
                 }
             });
         }
