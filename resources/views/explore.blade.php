@@ -1,7 +1,7 @@
 <x-layouts::app :title="__('Explore')">
     <div class="min-h-screen bg-[#F8F3EC] text-[#1F1F1F]">
-        <!-- Main Content -->
         <div class="flex">
+
             <!-- Sidebar -->
             <aside class="w-[280px] min-h-screen bg-white border-r border-neutral-200 px-6 py-8">
                 <h2 class="text-3xl font-bold text-[#E67E22]">Explore</h2>
@@ -10,39 +10,67 @@
                 </p>
 
                 <!-- Budget Range -->
-                <div class="mt-10">
+                <div class="mt-8">
                     <h3 class="font-semibold text-lg">Budget Range</h3>
-                    <div class="mt-4">
-                        <div class="h-1 bg-[#F4D3B2] rounded-full"></div>
-                        <div class="flex justify-between text-sm text-gray-500 mt-2">
-                            <span>$</span>
-                            <span>$$$</span>
-                        </div>
+                    <div class="flex gap-2 mt-4 flex-wrap">
+
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['budget' => 1])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('budget') == 1 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            $
+                        </a>
+
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['budget' => 2])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('budget') == 2 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            $$
+                        </a>
+
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['budget' => 3])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('budget') == 3 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            $$$
+                        </a>
+
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['budget' => 4])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('budget') == 4 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            $$$$
+                        </a>
+
                     </div>
                 </div>
 
-                <!-- Min Rating -->
+                <!-- Rating -->
                 <div class="mt-8">
                     <h3 class="font-semibold text-lg">Min. Rating</h3>
                     <div class="flex gap-2 mt-4 flex-wrap">
-                        <button class="px-4 py-2 rounded-lg bg-[#F4A261] text-white font-medium">4.5+</button>
-                        <button class="px-4 py-2 rounded-lg bg-[#F5F1EB]">4.0+</button>
-                        <button class="px-4 py-2 rounded-lg bg-[#F5F1EB]">3.5+</button>
-                    </div>
-                </div>
 
-                <!-- Distance -->
-                <div class="mt-8">
-                    <h3 class="font-semibold text-lg">Distance (Miles)</h3>
-                    <div class="flex gap-3 mt-4">
-                        <button class="flex-1 rounded-xl border border-neutral-200 p-3 text-left bg-[#F9F6F1]">
-                            <p class="text-xs text-gray-500">WITHIN</p>
-                            <p class="font-semibold">2 Miles</p>
-                        </button>
-                        <button class="flex-1 rounded-xl border border-[#F4A261] p-3 text-left bg-white">
-                            <p class="text-xs text-[#E67E22] font-semibold">ACTIVE</p>
-                            <p class="font-semibold">5 Miles</p>
-                        </button>
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['rating' => 4.5])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('rating') == 4.5 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            4.5+
+                        </a>
+
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['rating' => 4.0])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('rating') == 4.0 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            4.0+
+                        </a>
+
+                        <a
+                            href="{{ route('explore', array_merge(request()->query(), ['rating' => 3.5])) }}"
+                            class="px-4 py-2 rounded-lg {{ request('rating') == 3.5 ? 'bg-[#F4A261] text-white font-medium' : 'bg-[#F5F1EB]' }}"
+                        >
+                            3.5+
+                        </a>
+
                     </div>
                 </div>
 
@@ -50,70 +78,104 @@
                 <div class="mt-8">
                     <h3 class="font-semibold text-lg">Categories</h3>
                     <div class="flex flex-wrap gap-2 mt-4">
-                        <span class="px-4 py-2 rounded-full bg-[#F5E6D3]">Italian</span>
-                        <span class="px-4 py-2 rounded-full bg-[#F4A261] text-white">Japanese</span>
-                        <span class="px-4 py-2 rounded-full bg-[#F5E6D3]">Vegan</span>
-                        <span class="px-4 py-2 rounded-full bg-[#F5E6D3]">Artisan Bakery</span>
-                        <span class="px-4 py-2 rounded-full bg-[#F5E6D3]">French</span>
+
+                        @foreach($categories as $category)
+                            <a
+                                href="{{ route('explore', array_merge(request()->query(), ['category' => $category->id])) }}"
+                                class="px-4 py-2 rounded-full text-sm
+                                    {{ request('category') == $category->id
+                                        ? 'bg-[#F4A261] text-white font-medium'
+                                        : 'bg-[#F5E6D3]' }}"
+                            >
+                                {{ $category->name }}
+                            </a>
+                        @endforeach
+
                     </div>
                 </div>
 
                 <!-- Reset -->
-                <button class="mt-16 w-full rounded-xl bg-[#F5F1EB] py-4 font-medium">
+                <a
+                    href="{{ route('explore') }}"
+                    class="mt-16 w-full block text-center rounded-xl bg-[#F5F1EB] py-4 font-medium"
+                >
                     Reset Filters
-                </button>
+                </a>
             </aside>
 
             <!-- Content Area -->
             <main class="flex-1 px-10 py-8">
-                <!-- Top Heading -->
                 <div class="flex items-center justify-between mb-8">
                     <div>
                         <h1 class="text-5xl font-bold">Curated for your palate</h1>
-                        <p class="text-gray-500 mt-2">Showing 128 results in <span class="font-semibold text-black">San
-                                Francisco, CA</span></p>
-                    </div>
-
-                    <div class="flex gap-3">
-                        <button class="px-6 py-3 rounded-full bg-white border border-neutral-200 font-medium">
-                            Grid
-                        </button>
-                        <button class="px-6 py-3 rounded-full bg-white border border-neutral-200 text-gray-500">
-                            Map
-                        </button>
+                        <p class="text-gray-500 mt-2">
+                            Showing {{ $restaurants->count() }} curated restaurant results
+                        </p>
                     </div>
                 </div>
 
-                <!-- Cards -->
+                <!-- Restaurant Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    @foreach ([['title' => 'Mizumi Atelier', 'tag' => 'Japanese', 'rating' => '4.9'], ['title' => 'Pasta & Petals', 'tag' => 'Italian', 'rating' => '4.7'], ['title' => 'Flora Kitchen', 'tag' => 'Vegan', 'rating' => '4.8'], ['title' => 'Grains of Gold', 'tag' => 'Bakery', 'rating' => '4.9']] as $item)
-                        <a href="/order">
-                            <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm">
-                                <div class="h-56 bg-neutral-200"></div>
-                                <div class="p-5">
-                                    <span
-                                        class="inline-block px-3 py-1 text-xs rounded-full bg-[#F5E6D3] text-[#A65D1B] mb-3">
-                                        {{ $item['tag'] }}
-                                    </span>
-                                    <h3 class="text-2xl font-semibold">{{ $item['title'] }}</h3>
-                                    <p class="text-gray-500 mt-2 text-sm">
-                                        Elevated dining experience with carefully curated flavors.
-                                    </p>
-                                    <div class="flex justify-between items-center mt-5 text-sm">
-                                        <span class="font-semibold text-[#E67E22]">$$$</span>
-                                        <span class="text-gray-500">0.8 miles away</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
 
-                <!-- Load More -->
-                <div class="flex justify-center mt-10">
-                    <button class="px-10 py-4 rounded-full bg-white border border-neutral-200 font-medium shadow-sm">
-                        Load more culinary gems
-                    </button>
+                    @forelse($restaurants as $restaurant)
+                        <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm">
+
+                            <!-- Image -->
+                            <div class="h-56 bg-neutral-200 overflow-hidden">
+                                @if($restaurant->image)
+                                    <img
+                                        src="{{ asset('storage/' . $restaurant->image) }}"
+                                        alt="{{ $restaurant->name }}"
+                                        class="w-full h-full object-cover"
+                                    >
+                                @else
+                                    <div class="w-full h-full bg-neutral-200"></div>
+                                @endif
+                            </div>
+
+                            <!-- Content -->
+                            <div class="p-5">
+
+                                <span class="inline-block px-3 py-1 text-xs rounded-full bg-[#F5E6D3] text-[#A65D1B] mb-3">
+                                    {{ $restaurant->category->name }}
+                                </span>
+
+                                <h3 class="text-2xl font-semibold">
+                                    {{ $restaurant->name }}
+                                </h3>
+
+                                <p class="text-gray-500 mt-2 text-sm line-clamp-2">
+                                    {{ $restaurant->description }}
+                                </p>
+
+                                <div class="flex justify-between items-center mt-5 text-sm">
+                                    <span class="font-semibold text-[#E67E22]">
+                                        {{ $restaurant->budget_range }}
+                                    </span>
+
+                                    <span class="text-gray-500">
+                                        ⭐ {{ number_format($restaurant->rating, 1) }}
+                                    </span>
+                                </div>
+
+                                <p class="text-xs text-gray-400 mt-3">
+                                    {{ $restaurant->address }}
+                                </p>
+
+                            </div>
+                        </div>
+
+                    @empty
+                        <div class="col-span-full text-center py-20">
+                            <h3 class="text-2xl font-semibold">
+                                No restaurants found
+                            </h3>
+                            <p class="text-gray-500 mt-2">
+                                Try adjusting your filters
+                            </p>
+                        </div>
+                    @endforelse
+
                 </div>
             </main>
         </div>
