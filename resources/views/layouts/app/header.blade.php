@@ -11,31 +11,39 @@
         <!-- LEFT: Logo -->
         <div class="flex items-center space-x-2">
             <span class="text-lg font-semibold text-zinc-800">
-                CulinaryAtelier
+                <a href="{{ route('home') }}" class="hover:text-black transition">
+                    CulinaryAtelier
+                </a>
             </span>
         </div>
 
         <!-- CENTER: Navigation -->
         <div class="hidden md:flex items-center space-x-6 flex-1 justify-center">
             <nav class="flex items-center space-x-8 text-sm text-zinc-600">
-                <a href="#" class="hover:text-black transition">
+                <a href="{{ route('explore') }}" class="hover:text-black transition {{ request()->routeIs('explore') ? 'text-black font-bold' : '' }}">
                     Explore
-                </a>
-                <a href="#" class="hover:text-black transition">
-                    Recommendations
                 </a>
             </nav>
         </div>
 
-        <!-- RIGHT: Search and Login -->
+        <!-- RIGHT: Search and Auth -->
         <div class="flex items-center gap-3">
             <button class="hidden md:inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 text-zinc-600 hover:border-zinc-300 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
             </button>
-            <a href="#"
-                class="px-5 py-2 rounded-full bg-[#7A4900] text-white text-sm font-medium hover:bg-[#603900] transition">
-                Login
-            </a>
+            
+            @auth
+                <a href="{{ route('profile.user') }}" class="flex items-center gap-2 group">
+                    <div class="h-10 w-10 rounded-full bg-[#F5E6D3] border border-[#E3C1A5] flex items-center justify-center text-[#7A4900] font-bold group-hover:bg-[#EBDCC8] transition shadow-sm">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                </a>
+            @else
+                <a href="{{ route('login') }}"
+                    class="px-5 py-2 rounded-full bg-[#7A4900] text-white text-sm font-medium hover:bg-[#603900] transition">
+                    Login
+                </a>
+            @endauth
         </div>
 
     </flux:header>

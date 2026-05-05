@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 use App\Models\Category;
+use App\Models\Menu;
 
 class ExploreController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Restaurant::with([
-            'category',
-            'menus'
+        $query = Menu::with([
+            'restaurant.category',
         ]);
 
         /*
@@ -26,7 +26,10 @@ class ExploreController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%");
+                  ->orWhereHas('restaurant', function ($rq) use ($search) {
+                      $rq->where('name', 'like', "%{$search}%")
+                         ->orWhere('address', 'like', "%{$search}%");
+                  });
             });
         }
 
@@ -40,23 +43,21 @@ class ExploreController extends Controller
         if ($request->filled('budget')) {
             $budget = (int) $request->budget;
 
-            $query->whereHas('menus', function ($q) use ($budget) {
-                if ($budget === 1) {
-                    $q->where('price', '<=', 15);
-                }
+            if ($budget === 1) {
+                $query->where('price', '<=', 15);
+            }
 
-                if ($budget === 2) {
-                    $q->whereBetween('price', [16, 30]);
-                }
+            if ($budget === 2) {
+                $query->whereBetween('price', [16, 30]);
+            }
 
-                if ($budget === 3) {
-                    $q->whereBetween('price', [31, 60]);
-                }
+            if ($budget === 3) {
+                $query->whereBetween('price', [31, 60]);
+            }
 
-                if ($budget === 4) {
-                    $q->where('price', '>', 60);
-                }
-            });
+            if ($budget === 4) {
+                $query->where('price', '>', 60);
+            }
         }
 
         /*
@@ -76,7 +77,9 @@ class ExploreController extends Controller
         */
 
         if ($request->filled('category')) {
-            $query->where('category_id', $request->category);
+            $query->whereHas('restaurant', function ($q) use ($request) {
+                $q->where('category_id', $request->category);
+            });
         }
 
         /*
@@ -85,12 +88,19 @@ class ExploreController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $restaurants = $query->get();
+        $menus = $query->get();
         $categories = Category::all();
 
         return view('explore', compact(
-            'restaurants',
+            'menus',
             'categories'
         ));
+    }
+
+    public function show(Restaurant $restaurant)
+    {
+        $restaurant->load(['category', 'menus']);
+        
+        return view('restaurant', compact('restaurant'));
     }
 }

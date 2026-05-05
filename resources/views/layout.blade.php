@@ -1,21 +1,7 @@
 <x-layouts::app :title="__('Home')">
     <div class="min-h-screen bg-[#fdfbf7] font-sans text-[#1f1a17]">
         
-        {{-- NAVBAR --}}
-        <header class="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-            <div class="text-xl font-black tracking-tight text-[#1f1a17]">
-                Culinary<span class="font-bold">Atelier</span>
-            </div>
-            <nav class="hidden space-x-8 md:flex">
-                <a href="#" class="text-sm font-semibold text-[#1f1a17]">Explore</a>
-                <a href="#" class="text-sm font-semibold text-[#6a5b51]">How it works</a>
-            </nav>
-            <div>
-                <a href="#" class="rounded-full bg-[#955215] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-[#7a4210]">
-                    Log in
-                </a>
-            </div>
-        </header>
+       
 
         {{-- HERO SECTION --}}
         <section class="mx-auto max-w-7xl px-6 py-10 lg:py-16">
