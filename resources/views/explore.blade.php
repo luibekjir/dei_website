@@ -114,6 +114,9 @@
                     </div>
                 </div>
 
+                <!-- Map Container -->
+                <div id="map" class="w-full h-96 bg-neutral-200 rounded-2xl mb-8 border border-neutral-300 relative z-0"></div>
+
                 <!-- Restaurant Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
@@ -180,4 +183,87 @@
             </main>
         </div>
     </div>
+
+    <!-- Map Scripts & Styles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize map
+        const map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        let userLocation = null;
+        let routeLine = null;
+        
+        // Load restaurant data from existing collection
+        const restaurants = @json($restaurants);
+
+        // Get user location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                userLocation = [position.coords.latitude, position.coords.longitude];
+                map.setView(userLocation, 13);
+
+                // Add user marker
+                L.marker(userLocation).addTo(map)
+                    .bindPopup('<b>You are here</b>')
+                    .openPopup();
+
+                // Display restaurant markers with mock coordinates near user
+                restaurants.forEach(restaurant => {
+                    const offsetLat = (Math.random() - 0.5) * 0.04;
+                    const offsetLng = (Math.random() - 0.5) * 0.04;
+                    restaurant.lat = userLocation[0] + offsetLat;
+                    restaurant.lng = userLocation[1] + offsetLng;
+
+                    addRestaurantMarker(restaurant);
+                });
+
+            }, error => {
+                console.error("Error getting location: ", error);
+            });
+        }
+
+        function addRestaurantMarker(restaurant) {
+            const marker = L.marker([restaurant.lat, restaurant.lng]).addTo(map);
+            marker.bindPopup(`<b>${restaurant.name}</b>`);
+            
+            // Draw route on click
+            marker.on('click', function() {
+                if (userLocation) {
+                    drawRoute(restaurant.lat, restaurant.lng);
+                }
+            });
+        }
+
+        function drawRoute(destLat, destLng) {
+            if (routeLine) {
+                map.removeLayer(routeLine);
+            }
+
+            const start = `${userLocation[1]},${userLocation[0]}`;
+            const end = `${destLng},${destLat}`;
+            const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${start};${end}?overview=full&geometries=geojson`;
+
+            fetch(osrmUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        const coords = data.routes[0].geometry.coordinates;
+                        const latLngs = coords.map(c => [c[1], c[0]]);
+                        
+                        routeLine = L.polyline(latLngs, {color: '#E67E22', weight: 5}).addTo(map);
+                        map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+                    }
+                })
+                .catch(err => console.error("Routing error:", err));
+        }
+    });
+    </script>
 </x-layouts::app>
