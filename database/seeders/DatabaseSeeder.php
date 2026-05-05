@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\RestaurantSeeder;
+use Database\Seeders\MenuSeeder;    
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +20,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        ]);
+
+        $this->call([
+            CategorySeeder::class,
+            RestaurantSeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }
