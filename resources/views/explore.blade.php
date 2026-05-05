@@ -70,7 +70,8 @@
                 <div class="flex items-center justify-between mb-8">
                     <div>
                         <h1 class="text-5xl font-bold">Curated for your palate</h1>
-                        <p class="text-gray-500 mt-2">Showing 128 results in <span class="font-semibold text-black">San Francisco, CA</span></p>
+                        <p class="text-gray-500 mt-2">Showing 128 results in <span class="font-semibold text-black">San
+                                Francisco, CA</span></p>
                     </div>
 
                     <div class="flex gap-3">
@@ -85,28 +86,26 @@
 
                 <!-- Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    @foreach ([
-                        ['title' => 'Mizumi Atelier', 'tag' => 'Japanese', 'rating' => '4.9'],
-                        ['title' => 'Pasta & Petals', 'tag' => 'Italian', 'rating' => '4.7'],
-                        ['title' => 'Flora Kitchen', 'tag' => 'Vegan', 'rating' => '4.8'],
-                        ['title' => 'Grains of Gold', 'tag' => 'Bakery', 'rating' => '4.9'],
-                    ] as $item)
-                        <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm">
-                            <div class="h-56 bg-neutral-200"></div>
-                            <div class="p-5">
-                                <span class="inline-block px-3 py-1 text-xs rounded-full bg-[#F5E6D3] text-[#A65D1B] mb-3">
-                                    {{ $item['tag'] }}
-                                </span>
-                                <h3 class="text-2xl font-semibold">{{ $item['title'] }}</h3>
-                                <p class="text-gray-500 mt-2 text-sm">
-                                    Elevated dining experience with carefully curated flavors.
-                                </p>
-                                <div class="flex justify-between items-center mt-5 text-sm">
-                                    <span class="font-semibold text-[#E67E22]">$$$</span>
-                                    <span class="text-gray-500">0.8 miles away</span>
+                    @foreach ([['title' => 'Mizumi Atelier', 'tag' => 'Japanese', 'rating' => '4.9'], ['title' => 'Pasta & Petals', 'tag' => 'Italian', 'rating' => '4.7'], ['title' => 'Flora Kitchen', 'tag' => 'Vegan', 'rating' => '4.8'], ['title' => 'Grains of Gold', 'tag' => 'Bakery', 'rating' => '4.9']] as $item)
+                        <a href="/order">
+                            <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm">
+                                <div class="h-56 bg-neutral-200"></div>
+                                <div class="p-5">
+                                    <span
+                                        class="inline-block px-3 py-1 text-xs rounded-full bg-[#F5E6D3] text-[#A65D1B] mb-3">
+                                        {{ $item['tag'] }}
+                                    </span>
+                                    <h3 class="text-2xl font-semibold">{{ $item['title'] }}</h3>
+                                    <p class="text-gray-500 mt-2 text-sm">
+                                        Elevated dining experience with carefully curated flavors.
+                                    </p>
+                                    <div class="flex justify-between items-center mt-5 text-sm">
+                                        <span class="font-semibold text-[#E67E22]">$$$</span>
+                                        <span class="text-gray-500">0.8 miles away</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
 
