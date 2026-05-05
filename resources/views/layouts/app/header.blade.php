@@ -15,7 +15,7 @@
             </span>
         </div>
 
-        <!-- CENTER: Navigation & Search -->
+        <!-- CENTER: Navigation -->
         <div class="hidden md:flex items-center space-x-6 flex-1 justify-center">
             <nav class="flex items-center space-x-8 text-sm text-zinc-600">
                 <a href="#" class="hover:text-black transition">
@@ -25,15 +25,6 @@
                     Recommendations
                 </a>
             </nav>
-            
-            <!-- Search Bar -->
-            <div class="w-96">
-                <input 
-                    type="search" 
-                    placeholder="Search recipes, chefs, ingredients..." 
-                    class="w-full px-4 py-2 text-sm border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                />
-            </div>
         </div>
 
         <!-- RIGHT: Login Button -->

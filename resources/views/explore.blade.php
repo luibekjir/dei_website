@@ -112,6 +112,22 @@
                             Showing {{ $restaurants->count() }} curated restaurant results
                         </p>
                     </div>
+
+                    <!-- Search Bar -->
+                    <div class="w-96">
+                        <form action="{{ route('explore') }}" method="GET">
+                            @foreach(request()->except('search') as $key => $value)
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endforeach
+                            <input 
+                                type="search" 
+                                name="search"
+                                value="{{ request('search') }}"
+                                placeholder="Search restaurants, cuisines..." 
+                                class="w-full px-4 py-3 text-sm border border-zinc-200 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            />
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Map Container -->
