@@ -115,7 +115,12 @@
                 </div>
 
                 <!-- Map Container -->
-                <div id="map" class="w-full h-96 bg-neutral-200 rounded-2xl mb-8 border border-neutral-300 relative z-0"></div>
+                <!-- Map Container -->
+                <div id="map" style="height: 400px; width: 100%; display: block; background: #e5e7eb; border: 1px solid #d1d5db;" class="w-full rounded-2xl mb-8 relative z-10">
+                    <div class="flex items-center justify-center h-full text-gray-500 font-medium">
+                        Initializing Map...
+                    </div>
+                </div>
 
                 <!-- Restaurant Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -190,6 +195,15 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        if (typeof L === 'undefined') {
+            console.error('Leaflet library (L) is undefined. Check if the CDN link is working.');
+            const mapContainer = document.getElementById('map');
+            if (mapContainer) {
+                mapContainer.innerHTML = '<div class="flex items-center justify-center h-full text-red-500">Error: Leaflet library not loaded.</div>';
+            }
+            return;
+        }
+
         // Initialize map
         const map = L.map('map').setView([0, 0], 2);
 
@@ -200,39 +214,74 @@
 
         let userLocation = null;
         let routeLine = null;
+        const markerGroup = L.featureGroup().addTo(map);
         
         // Load restaurant data from existing collection
         const restaurants = @json($restaurants);
+
+        // Define a custom orange icon
+        const restaurantIcon = L.divIcon({
+            html: '<div style="background-color: #E67E22; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>',
+            className: 'custom-div-icon',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
 
         // Get user location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 userLocation = [position.coords.latitude, position.coords.longitude];
-                map.setView(userLocation, 13);
-
+                
                 // Add user marker
-                L.marker(userLocation).addTo(map)
-                    .bindPopup('<b>You are here</b>')
-                    .openPopup();
-
-                // Display restaurant markers with mock coordinates near user
+                const userMarker = L.marker(userLocation).addTo(map)
+                    .bindPopup('<b>You are here</b>');
+                
+                // Display restaurant markers
                 restaurants.forEach(restaurant => {
-                    const offsetLat = (Math.random() - 0.5) * 0.04;
-                    const offsetLng = (Math.random() - 0.5) * 0.04;
-                    restaurant.lat = userLocation[0] + offsetLat;
-                    restaurant.lng = userLocation[1] + offsetLng;
+                    const lat = restaurant.latitude ? parseFloat(restaurant.latitude) : (userLocation[0] + (Math.random() - 0.5) * 0.04);
+                    const lng = restaurant.longitude ? parseFloat(restaurant.longitude) : (userLocation[1] + (Math.random() - 0.5) * 0.04);
+                    
+                    restaurant.lat = lat;
+                    restaurant.lng = lng;
 
                     addRestaurantMarker(restaurant);
                 });
 
+                // Zoom to fit user and all restaurants
+                if (restaurants.length > 0) {
+                    const bounds = markerGroup.getBounds();
+                    bounds.extend(userLocation);
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                } else {
+                    map.setView(userLocation, 13);
+                }
+                
+                userMarker.openPopup();
+
             }, error => {
                 console.error("Error getting location: ", error);
+                // Fallback: If geolocation fails, just show restaurants
+                restaurants.forEach(restaurant => {
+                    if (restaurant.latitude && restaurant.longitude) {
+                        restaurant.lat = parseFloat(restaurant.latitude);
+                        restaurant.lng = parseFloat(restaurant.longitude);
+                        addRestaurantMarker(restaurant);
+                    }
+                });
+                if (restaurants.length > 0) {
+                    map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
+                }
             });
         }
 
         function addRestaurantMarker(restaurant) {
-            const marker = L.marker([restaurant.lat, restaurant.lng]).addTo(map);
-            marker.bindPopup(`<b>${restaurant.name}</b>`);
+            const marker = L.marker([restaurant.lat, restaurant.lng], { icon: restaurantIcon }).addTo(markerGroup);
+            
+            // Show name on hover
+            marker.bindTooltip(restaurant.name, { permanent: false, direction: 'top' });
+            
+            // Show details on click
+            marker.bindPopup(`<b>${restaurant.name}</b><br><span style="font-size: 12px; color: #666;">${restaurant.address}</span>`);
             
             // Draw route on click
             marker.on('click', function() {
