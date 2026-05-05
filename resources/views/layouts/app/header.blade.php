@@ -5,8 +5,8 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-zinc-800">
-    <flux:header class="flex items-center justify-between px-6 py-4 bg-white border-b border-zinc-200">
+<body class="min-h-screen bg-[#FFF8F0]">
+    <flux:header class="flex items-center justify-between px-6 py-4 bg-[#FFF8F0] border-b border-zinc-200">
 
         <!-- LEFT: Logo -->
         <div class="flex items-center space-x-2">

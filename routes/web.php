@@ -10,7 +10,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('restaurant', 'restaurant')->name('restaurant');
     Route::view('order', 'order')->name('order');
 
-    Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
+  
+    Route::get('/explore', [ExploreController::class, 'index']) ->name('explore');
+
+    Route::livewire('/ProfileUser', 'pages::user.profile')->name('profile.user');
 });
 
 require __DIR__.'/settings.php';
