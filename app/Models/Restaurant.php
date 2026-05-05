@@ -16,6 +16,8 @@ class Restaurant extends Model
         'image',
         'address',
         'rating',
+        'latitude',
+        'longitude',
     ];
 
     public function category()

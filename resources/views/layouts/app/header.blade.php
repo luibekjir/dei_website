@@ -16,11 +16,16 @@
         </div>
 
         <!-- CENTER: Navigation -->
-        <nav class="hidden md:flex items-center space-x-8 text-sm text-[#5D441E]">
-            <a href="#" class="hover:text-[#1B1B19] transition">Explore</a>
-            <a href="#" class="hover:text-[#1B1B19] transition">Collections</a>
-            <a href="#" class="hover:text-[#1B1B19] transition">The Magazine</a>
-        </nav>
+        <div class="hidden md:flex items-center space-x-6 flex-1 justify-center">
+            <nav class="flex items-center space-x-8 text-sm text-zinc-600">
+                <a href="#" class="hover:text-black transition">
+                    Explore
+                </a>
+                <a href="#" class="hover:text-black transition">
+                    Recommendations
+                </a>
+            </nav>
+        </div>
 
         <!-- RIGHT: Search and Login -->
         <div class="flex items-center gap-3">
