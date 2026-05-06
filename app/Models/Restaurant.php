@@ -18,6 +18,11 @@ class Restaurant extends Model
         'rating',
         'latitude',
         'longitude',
+        'facilities',
+    ];
+
+    protected $casts = [
+        'facilities' => 'array',
     ];
 
     public function category()

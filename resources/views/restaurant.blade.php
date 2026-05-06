@@ -89,6 +89,36 @@
                 </section>
             @endif
 
+            @if($restaurant->facilities)
+                <section class="mt-16">
+                    <h2 class="text-3xl font-semibold text-[#1D1D1B] mb-8">Facilities & Amenities</h2>
+                    <div class="grid gap-6 md:grid-cols-3">
+                        @foreach($restaurant->facilities as $category => $items)
+                            <div class="rounded-[2rem] bg-white p-8 border border-[#E9D6C3] shadow-sm transition hover:shadow-md">
+                                <h3 class="text-lg font-bold text-[#B25C18] mb-6 flex items-center gap-3">
+                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#FEF6ED] text-xl">
+                                        @if($category == 'Accessibility') ♿ @elseif($category == 'Amenities') ✨ @else 🅿️ @endif
+                                    </span>
+                                    {{ $category }}
+                                </h3>
+                                <ul class="space-y-4">
+                                    @foreach($items as $facility)
+                                        <li class="flex items-start gap-3 text-sm text-[#6F5F51]">
+                                            <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
+                                                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </span>
+                                            {{ $facility }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
             <section class="mt-16">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <div>
