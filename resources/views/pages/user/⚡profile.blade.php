@@ -352,10 +352,7 @@ new #[Title('User Profile')] class extends Component {
                 </div>
 
             @elseif($activeTab === 'orders')
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h2 class="text-2xl font-bold text-zinc-800 mb-4">Orders</h2>
-                    <p class="text-zinc-600">Your orders will appear here.</p>
-                </div>
+                @include('pages.user.orders_user')
             @elseif($activeTab === 'settings')
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <h2 class="text-2xl font-bold text-zinc-800 mb-4">Settings</h2>
