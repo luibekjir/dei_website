@@ -45,13 +45,79 @@
 
                         <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <span class="text-3xl font-semibold text-[#B25C18]">{{ $restaurant->budget_range }}</span>
-                            <a href="#" class="inline-flex items-center justify-center rounded-full bg-[#B35F17] px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#9A4F16]">
+                            <a href="{{ route('order') }}" class="inline-flex items-center justify-center rounded-full bg-[#B35F17] px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#9A4F16]">
                                 Order Now
                             </a>
                         </div>
                     </div>
                 </div>
             </section>
+
+            @if($highlightedMenu)
+                <section class="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <div class="overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#FFF3E4] to-white border-2 border-orange-200 shadow-[0_30px_70px_rgba(226,146,67,0.15)]">
+                        <div class="flex flex-col md:flex-row">
+                            <div class="md:w-1/3 h-64 md:h-auto overflow-hidden">
+                                @if($highlightedMenu->image)
+                                    <img src="{{ asset('storage/' . $highlightedMenu->image) }}" alt="{{ $highlightedMenu->name }}" class="h-full w-full object-cover" />
+                                @else
+                                    <div class="h-full w-full flex items-center justify-center bg-[#FCE9D9]">
+                                        <span class="text-orange-300 italic">No image</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <span class="bg-orange-500 text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-sm">
+                                        Your Culinary Discovery
+                                    </span>
+                                    <span class="text-[#B25C18] font-bold text-sm">⭐ {{ number_format($highlightedMenu->rating, 1) }}</span>
+                                </div>
+                                <h2 class="text-4xl font-bold text-[#1D1D1B] leading-tight">{{ $highlightedMenu->name }}</h2>
+                                <p class="mt-4 text-[#6F5F51] text-lg leading-relaxed max-w-2xl">
+                                    {{ $highlightedMenu->description }}
+                                </p>
+                                <div class="mt-8 flex items-center justify-between gap-6">
+                                    <span class="text-3xl font-bold text-[#B25C18]">${{ number_format($highlightedMenu->price, 2) }}</span>
+                                    <button class="rounded-full bg-[#B35F17] px-10 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#9A4F16] hover:scale-105 active:scale-95">
+                                        + Add to Order
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endif
+
+            @if($restaurant->facilities)
+                <section class="mt-16">
+                    <h2 class="text-3xl font-semibold text-[#1D1D1B] mb-8">Facilities & Amenities</h2>
+                    <div class="grid gap-6 md:grid-cols-3">
+                        @foreach($restaurant->facilities as $category => $items)
+                            <div class="rounded-[2rem] bg-white p-8 border border-[#E9D6C3] shadow-sm transition hover:shadow-md">
+                                <h3 class="text-lg font-bold text-[#B25C18] mb-6 flex items-center gap-3">
+                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#FEF6ED] text-xl">
+                                        @if($category == 'Accessibility') ♿ @elseif($category == 'Amenities') ✨ @else 🅿️ @endif
+                                    </span>
+                                    {{ $category }}
+                                </h3>
+                                <ul class="space-y-4">
+                                    @foreach($items as $facility)
+                                        <li class="flex items-start gap-3 text-sm text-[#6F5F51]">
+                                            <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
+                                                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </span>
+                                            {{ $facility }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
 
             <section class="mt-16">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -68,6 +134,9 @@
 
                 <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     @foreach ($restaurant->menus as $item)
+                        @if(isset($highlightId) && $highlightId == $item->id)
+                            @continue
+                        @endif
                         <article class="overflow-hidden rounded-[2rem] border border-[#F0DECB] bg-white shadow-sm">
                             <div class="h-56 overflow-hidden rounded-t-[2rem] bg-[#F4E6D9]">
                                 @if($item->image)

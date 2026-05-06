@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A]">
         <div class="mx-auto max-w-7xl px-6 py-8">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <a href=""
+                <a href="{{ route('explore') }}"
                     class="inline-flex items-center gap-3 text-sm font-semibold text-[#6D3C0F] transition hover:text-[#7A4E1B]">
                     <span
                         class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#B25C18] shadow-sm">←</span>

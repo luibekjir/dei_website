@@ -94,10 +94,18 @@
                     </div>
                 </div>
 
+                <!-- Surprise Me -->
+                <a
+                    href="{{ route('explore.random', request()->query()) }}"
+                    class="mt-16 w-full block text-center rounded-xl bg-gradient-to-r from-[#E67E22] to-[#F39C12] py-4 font-bold text-white shadow-lg hover:opacity-90 transition-opacity"
+                >
+                    Surprise Me 🎲
+                </a>
+
                 <!-- Reset -->
                 <a
                     href="{{ route('explore') }}"
-                    class="mt-16 w-full block text-center rounded-xl bg-[#F5F1EB] py-4 font-medium"
+                    class="mt-4 w-full block text-center rounded-xl bg-[#F5F1EB] py-4 font-medium text-gray-600"
                 >
                     Reset Filters
                 </a>
@@ -142,7 +150,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
                     @forelse($menus as $menu)
-                    <a href="{{ route('restaurant.show', $menu->restaurant->id) }}">
+                    <a href="{{ route('restaurant.show', [$menu->restaurant->id, 'highlight' => $menu->id]) }}">
                         <div class="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
 
                             <!-- Image -->
@@ -310,7 +318,7 @@
                     <span style="font-size: 12px; color: #E67E22; font-weight: bold;">$${parseFloat(menu.price).toFixed(2)}</span><br>
                     <span style="font-size: 11px; color: #666;">at ${menu.restaurant.name}</span><br>
                     <div class="mt-2 pt-2 border-t border-zinc-100">
-                        <a href="/restaurant/${menu.restaurant.id}" style="color: #E67E22; font-weight: bold; text-decoration: none; font-size: 11px;">View Menu Details →</a>
+                        <a href="/restaurant/${menu.restaurant.id}?highlight=${menu.id}" style="color: #E67E22; font-weight: bold; text-decoration: none; font-size: 11px;">View Menu Details →</a>
                     </div>
                 </div>
             `);
