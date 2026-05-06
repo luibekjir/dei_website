@@ -8,7 +8,7 @@ Route::view('/', 'layout')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::get('/restaurant/{restaurant}', [ExploreController::class, 'show'])->name('restaurant.show');
-    Route::view('order', 'order')->name('order');
+    Route::livewire('order', 'order-component')->name('order');
 
   
     Route::get('/explore', [ExploreController::class, 'index']) ->name('explore');
