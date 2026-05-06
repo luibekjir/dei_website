@@ -20,6 +20,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.9,
                 'latitude' => -7.2843,
                 'longitude' => 112.6433,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance', 'Wheelchair accessible seating'],
+                    'Amenities' => ['Wifi', 'AC', 'Toilet', 'Outdoor seating'],
+                    'Parking' => ['Free street parking', 'Paid parking lot']
+                ]
             ],
             [
                 'name' => 'Pasta & Petals',
@@ -30,6 +35,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.7,
                 'latitude' => -7.2855,
                 'longitude' => 112.6420,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance'],
+                    'Amenities' => ['AC', 'Toilet', 'Indoor seating'],
+                    'Parking' => ['Free parking lot']
+                ]
             ],
             [
                 'name' => 'Flora Kitchen',
@@ -40,6 +50,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.8,
                 'latitude' => -7.2862,
                 'longitude' => 112.6415,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance', 'Wheelchair accessible toilet'],
+                    'Amenities' => ['Wifi', 'AC', 'Toilet', 'Outdoor seating'],
+                    'Parking' => ['Free parking lot']
+                ]
             ],
             [
                 'name' => 'Citra Bakery',
@@ -50,6 +65,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.6,
                 'latitude' => -7.2891,
                 'longitude' => 112.6468,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance'],
+                    'Amenities' => ['Toilet', 'Indoor seating'],
+                    'Parking' => ['Free street parking']
+                ]
             ],
             [
                 'name' => 'Bistro de Citra',
@@ -60,6 +80,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.5,
                 'latitude' => -7.2950,
                 'longitude' => 112.6350,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance'],
+                    'Amenities' => ['AC', 'Toilet', 'Outdoor seating'],
+                    'Parking' => ['Paid parking lot']
+                ]
             ],
             [
                 'name' => 'Sushi Zen Surabaya',
@@ -70,6 +95,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.8,
                 'latitude' => -7.2800,
                 'longitude' => 112.6450,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance', 'Wheelchair accessible seating'],
+                    'Amenities' => ['Wifi', 'AC', 'Toilet'],
+                    'Parking' => ['Free parking lot']
+                ]
             ],
             [
                 'name' => 'Toscana Grill Citraland',
@@ -80,6 +110,11 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.4,
                 'latitude' => -7.2780,
                 'longitude' => 112.6400,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance'],
+                    'Amenities' => ['Wifi', 'AC', 'Toilet', 'Outdoor seating'],
+                    'Parking' => ['Paid parking lot']
+                ]
             ],
             [
                 'name' => 'Green Leaf Surabaya',
@@ -90,11 +125,16 @@ class RestaurantSeeder extends Seeder
                 'rating' => 4.3,
                 'latitude' => -7.2750,
                 'longitude' => 112.6350,
+                'facilities' => [
+                    'Accessibility' => ['Wheelchair accessible entrance'],
+                    'Amenities' => ['Wifi', 'AC', 'Toilet'],
+                    'Parking' => ['Free street parking']
+                ]
             ],
         ];
 
         foreach ($restaurants as $restaurant) {
-            Restaurant::create($restaurant);
+            Restaurant::updateOrCreate(['name' => $restaurant['name']], $restaurant);
         }
     }
 }

@@ -18,6 +18,11 @@ class Restaurant extends Model
         'rating',
         'latitude',
         'longitude',
+        'facilities',
+    ];
+
+    protected $casts = [
+        'facilities' => 'array',
     ];
 
     public function category()
@@ -47,5 +52,10 @@ class Restaurant extends Model
         }
 
         return '$$$$';
-}
+    }
+
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
 }

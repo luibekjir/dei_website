@@ -1,19 +1,19 @@
-<x-layouts::app :title="__('The Heritage Kitchen')">
+<x-layouts::app :title="$restaurant->name">
     <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A]">
         <div class="mx-auto max-w-7xl px-6 py-8">
             <section class="space-y-10">
                 <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div class="max-w-2xl">
                         <p class="text-sm uppercase tracking-[0.28em] text-[#AB7B45]">CulinaryAtelier</p>
-                        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-[#1D1D1B] sm:text-5xl">The Heritage Kitchen</h1>
+                        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-[#1D1D1B] sm:text-5xl">{{ $restaurant->name }}</h1>
                         <div class="mt-5 flex flex-wrap gap-4 text-sm text-[#6B5A4A]">
                             <span class="inline-flex items-center gap-2">
                                 <span class="inline-flex h-2.5 w-2.5 rounded-full bg-[#E5902C]"></span>
-                                123 Spice Route, Gastronomy District
+                                {{ $restaurant->address }}
                             </span>
                             <span class="inline-flex items-center gap-2">
-                                <span class="rounded-full bg-[#F8E7D3] px-2 py-1 text-xs font-semibold text-[#A5621B]">4.8</span>
-                                2.4k Reviews
+                                <span class="rounded-full bg-[#F8E7D3] px-2 py-1 text-xs font-semibold text-[#A5621B]">{{ number_format($restaurant->rating, 1) }}</span>
+                                {{ $restaurant->category->name }}
                             </span>
                         </div>
                     </div>
@@ -25,27 +25,99 @@
 
                 <div class="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] items-start">
                     <div class="overflow-hidden rounded-[2rem] bg-[#F7E8DD] shadow-[0_40px_100px_rgba(226,146,67,0.16)]">
-                        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80" alt="Saffron Infused Biryani" class="h-full w-full object-cover" />
+                        @if($restaurant->image)
+                            <img src="{{ asset('storage/' . $restaurant->image) }}" alt="{{ $restaurant->name }}" class="h-full w-full object-cover" />
+                        @else
+                            <div class="h-full w-full flex items-center justify-center bg-zinc-200">
+                                <span class="text-zinc-400 italic">No image available</span>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="flex min-h-full flex-col justify-between rounded-[2rem] bg-white p-8 shadow-[0_40px_100px_rgba(226,146,67,0.12)]">
                         <div>
-                            <span class="text-xs uppercase tracking-[0.28em] text-[#E38B28]">Star Dish</span>
-                            <h2 class="mt-6 text-4xl font-bold tracking-tight text-[#161616] sm:text-5xl">Saffron Infused Biryani</h2>
+                            <span class="text-xs uppercase tracking-[0.28em] text-[#E38B28]">{{ $restaurant->category->name }}</span>
+                            <h2 class="mt-6 text-4xl font-bold tracking-tight text-[#161616] sm:text-5xl">{{ $restaurant->name }}</h2>
                             <p class="mt-6 max-w-xl text-sm leading-7 text-[#6F5F51]">
-                                An heirloom recipe passed down through generations. Our signature long-grain basmati rice is slow-cooked over a low flame with hand-picked Persian saffron, toasted nuts, and aromatic spices.
+                                {{ $restaurant->description }}
                             </p>
                         </div>
 
                         <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <span class="text-3xl font-semibold text-[#B25C18]">$32.00</span>
-                            <a href="#" class="inline-flex items-center justify-center rounded-full bg-[#B35F17] px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#9A4F16]">
+                            <span class="text-3xl font-semibold text-[#B25C18]">{{ $restaurant->budget_range }}</span>
+                            <a href="{{ route('order') }}" class="inline-flex items-center justify-center rounded-full bg-[#B35F17] px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#9A4F16]">
                                 Order Now
                             </a>
                         </div>
                     </div>
                 </div>
             </section>
+
+            @if($highlightedMenu)
+                <section class="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <div class="overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#FFF3E4] to-white border-2 border-orange-200 shadow-[0_30px_70px_rgba(226,146,67,0.15)]">
+                        <div class="flex flex-col md:flex-row">
+                            <div class="md:w-1/3 h-64 md:h-auto overflow-hidden">
+                                @if($highlightedMenu->image)
+                                    <img src="{{ asset('storage/' . $highlightedMenu->image) }}" alt="{{ $highlightedMenu->name }}" class="h-full w-full object-cover" />
+                                @else
+                                    <div class="h-full w-full flex items-center justify-center bg-[#FCE9D9]">
+                                        <span class="text-orange-300 italic">No image</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <span class="bg-orange-500 text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-sm">
+                                        Your Culinary Discovery
+                                    </span>
+                                    <span class="text-[#B25C18] font-bold text-sm">⭐ {{ number_format($highlightedMenu->rating, 1) }}</span>
+                                </div>
+                                <h2 class="text-4xl font-bold text-[#1D1D1B] leading-tight">{{ $highlightedMenu->name }}</h2>
+                                <p class="mt-4 text-[#6F5F51] text-lg leading-relaxed max-w-2xl">
+                                    {{ $highlightedMenu->description }}
+                                </p>
+                                <div class="mt-8 flex items-center justify-between gap-6">
+                                    <span class="text-3xl font-bold text-[#B25C18]">${{ number_format($highlightedMenu->price, 2) }}</span>
+                                    <button class="rounded-full bg-[#B35F17] px-10 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#9A4F16] hover:scale-105 active:scale-95">
+                                        + Add to Order
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endif
+
+            @if($restaurant->facilities)
+                <section class="mt-16">
+                    <h2 class="text-3xl font-semibold text-[#1D1D1B] mb-8">Facilities & Amenities</h2>
+                    <div class="grid gap-6 md:grid-cols-3">
+                        @foreach($restaurant->facilities as $category => $items)
+                            <div class="rounded-[2rem] bg-white p-8 border border-[#E9D6C3] shadow-sm transition hover:shadow-md">
+                                <h3 class="text-lg font-bold text-[#B25C18] mb-6 flex items-center gap-3">
+                                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#FEF6ED] text-xl">
+                                        @if($category == 'Accessibility') ♿ @elseif($category == 'Amenities') ✨ @else 🅿️ @endif
+                                    </span>
+                                    {{ $category }}
+                                </h3>
+                                <ul class="space-y-4">
+                                    @foreach($items as $facility)
+                                        <li class="flex items-start gap-3 text-sm text-[#6F5F51]">
+                                            <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
+                                                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </span>
+                                            {{ $facility }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
 
             <section class="mt-16">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -57,30 +129,35 @@
                         <a href="{{ route('order') }}" class="inline-flex items-center rounded-full bg-[#5C3611] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#4F2F0E]">
                             View Order (3)
                         </a>
-                        <div class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 shadow-sm">
-                            <button class="rounded-full bg-[#E9D5BC] px-4 py-2 text-sm font-semibold text-[#7A4E1B]">Main Course</button>
-                            <button class="rounded-full bg-[#F8F2E8] px-4 py-2 text-sm text-[#7A4E1B]">Appetizers</button>
-                            <button class="rounded-full bg-[#F8F2E8] px-4 py-2 text-sm text-[#7A4E1B]">Desserts</button>
-                        </div>
                     </div>
                 </div>
 
                 <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                    @foreach ([
-                        ['title' => 'Spiced Lamb Skewers', 'price' => '$18.00', 'description' => 'Tender chunks of marinated lamb, flame-grilled with our secret Gastronomy District spice blend.', 'image' => 'https://images.unsplash.com/photo-1514516870920-364f6ea4b4a8?auto=format&fit=crop&w=800&q=80'],
-                        ['title' => 'Lentil Veloute', 'price' => '$12.00', 'description' => 'A creamy blend of red lentils, cumin, and roasted garlic, served with a dash of herb-infused oil.', 'image' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80'],
-                        ['title' => 'Rose Water Phirni', 'price' => '$10.00', 'description' => 'A classic ground rice pudding infused with organic rose water, finished with crushed pistachios.', 'image' => 'https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=800&q=80'],
-                    ] as $item)
+                    @foreach ($restaurant->menus as $item)
+                        @if(isset($highlightId) && $highlightId == $item->id)
+                            @continue
+                        @endif
                         <article class="overflow-hidden rounded-[2rem] border border-[#F0DECB] bg-white shadow-sm">
                             <div class="h-56 overflow-hidden rounded-t-[2rem] bg-[#F4E6D9]">
-                                <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" class="h-full w-full object-cover" />
+                                @if($item->image)
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="h-full w-full object-cover" />
+                                @else
+                                    <div class="h-full w-full flex items-center justify-center bg-zinc-200">
+                                        <span class="text-zinc-400 italic">No image available</span>
+                                    </div>
+                                @endif
                             </div>
                             <div class="space-y-4 px-6 py-6">
                                 <div class="flex items-center justify-between gap-4">
-                                    <h3 class="text-xl font-semibold text-[#161616]">{{ $item['title'] }}</h3>
-                                    <span class="text-lg font-semibold text-[#B25C18]">{{ $item['price'] }}</span>
+                                    <h3 class="text-xl font-semibold text-[#161616]">{{ $item->name }}</h3>
+                                    <span class="text-lg font-semibold text-[#B25C18]">${{ number_format($item->price, 2) }}</span>
                                 </div>
-                                <p class="text-sm leading-6 text-[#6F5F51]">{{ $item['description'] }}</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="flex items-center text-xs font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">
+                                        ⭐ {{ number_format($item->rating, 1) }}
+                                    </span>
+                                </div>
+                                <p class="text-sm leading-6 text-[#6F5F51]">{{ $item->description }}</p>
                                 <button class="inline-flex w-full items-center justify-center rounded-full bg-[#F5E7D6] px-4 py-3 text-sm font-semibold text-[#7A4E1B] transition hover:bg-[#E9D0B3]">
                                     + Add to Order
                                 </button>
