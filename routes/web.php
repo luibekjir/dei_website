@@ -12,6 +12,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
   
     Route::get('/explore', [ExploreController::class, 'index']) ->name('explore');
+    Route::get('/random', [ExploreController::class, 'random'])->name('explore.random');
 
     Route::livewire('/profile', 'pages::user.profile')->name('profile.user');
 });

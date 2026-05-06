@@ -2,12 +2,12 @@
     <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A]">
         <div class="mx-auto max-w-7xl px-6 py-8">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <!-- <a href="{{ route('restaurant') }}"
+                <a href="{{ route('explore') }}"
                     class="inline-flex items-center gap-3 text-sm font-semibold text-[#6D3C0F] transition hover:text-[#7A4E1B]">
                     <span
                         class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#B25C18] shadow-sm">←</span>
                     Culinary Atelier
-                </a> -->
+                </a>
 
                 <div class="rounded-[1.75rem] border border-[#E9D6C3] bg-white px-6 py-4 text-right shadow-sm sm:px-7">
                     <p class="text-xs uppercase tracking-[0.28em] text-[#AB7B45]">Order #CA-8829</p>
