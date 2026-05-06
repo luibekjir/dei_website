@@ -7,6 +7,8 @@
         "dev": "vite"
     },
     "dependencies": {
+        "@emnapi/core": "^1.10.0",
+        "@emnapi/runtime": "^1.10.0",
         "@tailwindcss/vite": "^4.1.11",
         "autoprefixer": "^10.4.20",
         "concurrently": "^9.0.1",
