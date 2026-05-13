@@ -1,3 +1,5 @@
 {
-  "phpVersion": "8.4"
+  "packages": {
+    "php": "8.4"
+  }
 }
