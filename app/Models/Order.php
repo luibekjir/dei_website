@@ -7,8 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
+    const STATUS_PREPARING = 'preparing';
+    const STATUS_ON_DELIVERY = 'on_delivery';
+    const STATUS_DELIVERED = 'delivered';
+    const STATUS_READY_FOR_PICKUP = 'ready_for_pickup';
+    const STATUS_COMPLETED = 'completed';
+
     protected $fillable = [
         'user_id',
+        'restaurant_id',
         'items',
         'subtotal',
         'taxes',
@@ -18,6 +25,8 @@ class Order extends Model
         'negotiation_message',
         'total',
         'status',
+        'type',
+        'midtrans_order_id',
     ];
 
     protected $casts = [
@@ -32,5 +41,15 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function restaurant(): BelongsTo
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
     }
 }

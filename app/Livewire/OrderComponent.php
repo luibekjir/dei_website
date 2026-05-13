@@ -18,22 +18,9 @@ class OrderComponent extends Component
 
     public function mount()
     {
-        // Initialize with sample data
-        $this->items = [
-            [
-                'name' => 'Miso-Glazed Salmon',
-                'price' => 145000,
-                'quantity' => 1,
-                'image' => 'https://images.unsplash.com/photo-1514516870920-364f6ea4b4a8?auto=format&fit=crop&w=500&q=80'
-            ],
-            [
-                'name' => 'Truffle Pasta',
-                'price' => 185000,
-                'quantity' => 1,
-                'image' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80'
-            ]
-        ];
-
+        // Load from session cart
+        $this->items = session()->get('cart', []);
+        
         $this->deliveryFee = 19000;
         $this->negotiatedDeliveryFee = $this->deliveryFee;
         $this->calculateTotal();
@@ -43,6 +30,7 @@ class OrderComponent extends Component
     {
         if ($quantity < 1) return;
         $this->items[$index]['quantity'] = $quantity;
+        session()->put('cart', $this->items);
         $this->calculateTotal();
     }
 
@@ -50,6 +38,7 @@ class OrderComponent extends Component
     {
         unset($this->items[$index]);
         $this->items = array_values($this->items);
+        session()->put('cart', $this->items);
         $this->calculateTotal();
     }
 
@@ -92,10 +81,164 @@ class OrderComponent extends Component
         }
     }
 
+    public $paymentStatus = 'idle'; // idle, processing, success, failed
+    public $qrCodeUrl = null;
+    public $currentOrderId = null;
+    public $paymentTimer = 0;
+
+    public function startPayment()
+    {
+        if (empty($this->items)) return;
+
+        $this->paymentStatus = 'processing';
+        $this->qrCodeUrl = null;
+
+        // Midtrans Configuration
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+        
+        // Debugging: Disable SSL verification and force IPv4 for local development
+        \Midtrans\Config::$curlOptions = [
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+            CURLOPT_HTTPHEADER => [], // Fix for SDK bug: Undefined array key 10023
+        ];
+
+        $this->currentOrderId = 'ORDER-' . time() . '-' . auth()->id();
+
+        $params = [
+            'payment_type' => 'gopay',
+            'transaction_details' => [
+                'order_id' => $this->currentOrderId,
+                'gross_amount' => (int)$this->total,
+            ],
+            'customer_details' => [
+                'first_name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
+        ];
+
+        try {
+            $response = \Midtrans\CoreApi::charge($params);
+            
+            \Illuminate\Support\Facades\Log::info('Midtrans Response: ' . json_encode($response));
+            if (isset($response->actions)) {
+                foreach ($response->actions as $action) {
+                    if ($action->name === 'generate-qr-code' || $action->name === 'generate-qr') {
+                        $this->qrCodeUrl = $action->url;
+                        break;
+                    }
+                }
+            }
+            
+            if (!$this->qrCodeUrl) {
+                throw new \Exception('Failed to generate QR Code from Midtrans response.');
+            }
+
+            $this->paymentStatus = 'awaiting-payment';
+            $this->paymentTimer = 900;
+            \Illuminate\Support\Facades\Log::info('QR URL successfully set: ' . $this->qrCodeUrl);
+            $this->dispatch('payment-started');
+
+        } catch (\Exception $e) {
+            $this->paymentStatus = 'idle';
+            \Illuminate\Support\Facades\Log::error('Midtrans API Error: ' . $e->getMessage());
+            $this->dispatch('notify', [
+                'message' => 'Payment Error: ' . $e->getMessage() . '. Cek log untuk detail.', 
+                'type' => 'error'
+            ]);
+        }
+    }
+    public function checkPaymentStatus()
+    {
+        if (!$this->qrCodeUrl) return;
+
+        // Extract order_id from current session or track it
+        // For simplicity, we search for the latest pending order of the user
+        // Or we could store it in a property. Let's add a property $currentOrderId.
+
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+
+        try {
+            // We need to store the orderId we sent to Midtrans
+            // I'll add a public $currentOrderId property to the class.
+            if (!$this->currentOrderId) return;
+
+            $status = \Midtrans\Transaction::status($this->currentOrderId);
+            
+            if ($status->transaction_status == 'settlement' || $status->transaction_status == 'capture') {
+                $this->completePayment();
+            } else {
+                $this->dispatch('notify', [
+                    'message' => 'Status: ' . $status->transaction_status,
+                    'type' => 'info'
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->dispatch('notify', [
+                'message' => 'Gagal cek status: ' . $e->getMessage(),
+                'type' => 'error'
+            ]);
+        }
+    }
+
+    public function completePayment()
+    {
+        $this->paymentStatus = 'success';
+        $this->checkout();
+    }
+
+    public function checkout()
+    {
+        if (empty($this->items)) return;
+
+        $restaurantId = !empty($this->items) ? reset($this->items)['restaurant_id'] : null;
+
+        // Create actual order record in DB
+        $order = Order::create([
+            'restaurant_id' => $restaurantId,
+            'user_id' => auth()->id(),
+            'items' => $this->items,
+            'subtotal' => $this->subtotal,
+            'taxes' => $this->taxes,
+            'delivery_fee' => $this->deliveryFee,
+            'total' => $this->total,
+            'status' => $this->paymentStatus === 'success' ? 'confirmed' : 'pending',
+            'type' => 'delivery',
+            'midtrans_order_id' => $this->currentOrderId,
+        ]);
+
+        session()->forget('cart');
+        return redirect()->route('dashboard')->with('success', 'Pemesanan berhasil! Pesanan Anda sedang disiapkan.');
+    }
+
     private function calculateTotal()
     {
         $this->subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $this->items));
         $this->taxes = $this->subtotal * 0.1; // 10% tax
+        
+        // Calculate flexible delivery fee
+        $baseFee = 19000;
+        $itemsCount = array_sum(array_column($this->items, 'quantity'));
+        
+        $restaurantId = !empty($this->items) ? reset($this->items)['restaurant_id'] : null;
+        $restaurant = $restaurantId ? \App\Models\Restaurant::find($restaurantId) : null;
+        if ($restaurant) {
+            $rules = $restaurant->deliveryRules()->where('is_active', true)->get();
+            $bestFee = $baseFee;
+            
+            foreach ($rules as $rule) {
+                $calculated = $rule->calculateFee($itemsCount, $this->subtotal, $baseFee);
+                if ($calculated < $bestFee) {
+                    $bestFee = $calculated;
+                }
+            }
+            $this->deliveryFee = $bestFee;
+        }
+
         $this->total = $this->subtotal + $this->taxes + $this->deliveryFee;
     }
 

@@ -33,11 +33,20 @@
             </button>
             
             @auth
-                <a href="{{ route('profile.user') }}" class="flex items-center gap-2 group">
-                    <div class="h-10 w-10 rounded-full bg-[#F5E6D3] border border-[#E3C1A5] flex items-center justify-center text-[#7A4900] font-bold group-hover:bg-[#EBDCC8] transition shadow-sm">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-                </a>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('profile.user') }}" class="flex items-center gap-2 group">
+                        <div class="h-10 w-10 rounded-full bg-[#F5E6D3] border border-[#E3C1A5] flex items-center justify-center text-[#7A4900] font-bold group-hover:bg-[#EBDCC8] transition shadow-sm">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </div>
+                    </a>
+                    
+                    <form method="POST" action="{{ route('logout') }}" class="m-0">
+                        @csrf
+                        <button type="submit" class="text-[10px] font-bold text-[#AB7B45] uppercase tracking-widest hover:text-[#7A4900] transition-colors border border-[#F0DECB] px-3 py-2 rounded-full">
+                            Logout
+                        </button>
+                    </form>
+                </div>
             @else
                 <a href="{{ route('login') }}"
                     class="px-5 py-2 rounded-full bg-[#7A4900] text-white text-sm font-medium hover:bg-[#603900] transition">
@@ -88,6 +97,8 @@
         </flux:toast.group>
     @endpersist
 
+    @livewire('chat-component')
+    @livewire('review-component')
     @fluxScripts
 </body>
 

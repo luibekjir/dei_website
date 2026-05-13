@@ -1,171 +1,183 @@
-<div class="mb-8">
+<div wire:poll.5s class="mb-8">
     <h1 class="text-4xl font-bold text-zinc-800 mb-2">Order Tracking</h1>
     <p class="text-zinc-600 text-lg">Keeping an eye on your culinary desire</p>
 </div>
 
-<div class="grid grid-cols-3 gap-6">
-    <div class="col-span-2 space-y-6">
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <div class="flex items-start gap-4 mb-6">
-                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=100&h=100&fit=crop" alt="Food" class="w-20 h-20 rounded-lg object-cover">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 space-y-8">
+        <!-- Active Order Tracking -->
+        @php $activeOrder = $allOrders->whereIn('status', ['pending', 'preparing', 'on_delivery'])->first(); @endphp
+        
+        @if($activeOrder)
+        <div class="bg-white rounded-3xl shadow-sm border border-zinc-100 p-8">
+            <div class="flex items-start gap-6 mb-8">
+                <div class="w-24 h-24 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 font-bold text-3xl">
+                    {{ $activeOrder->restaurant->name[0] }}
+                </div>
                 <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-zinc-800 mb-1">Pepperoni Pizza</h3>
-                    <div class="flex items-center gap-4 text-sm text-zinc-600">
-                        <span>Order #5452</span>
-                        <span class="text-orange-500 font-medium">Arriving in 12 minutes</span>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-2xl font-bold text-zinc-800 mb-1">{{ $activeOrder->restaurant->name }}</h3>
+                            <div class="flex items-center gap-4 text-sm text-zinc-500">
+                                <span class="font-mono">Order #{{ str_pad($activeOrder->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                <span class="text-orange-500 font-bold">•</span>
+                                <span class="text-orange-500 font-bold">Arriving soon</span>
+                            </div>
+                        </div>
+                        <span class="bg-orange-500 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">{{ $activeOrder->status }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="mb-6">
-                <h4 class="text-sm font-semibold text-zinc-700 mb-4">Check Delivery</h4>
+            <div class="mb-10 px-4">
+                <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">Delivery Progress</h4>
                 <div class="flex items-center justify-between relative">
-                    <div class="absolute top-6 left-6 right-6 h-0.5 bg-zinc-200"></div>
-                    <div class="absolute top-6 left-6 h-0.5 bg-amber-600" style="width: 50%;"></div>
+                    <div class="absolute top-6 left-0 right-0 h-1 bg-zinc-100 rounded-full"></div>
+                    <div class="absolute top-6 left-0 h-1 bg-orange-500 rounded-full transition-all duration-1000" 
+                         style="width: {{ $activeOrder->status === 'pending' ? '10%' : ($activeOrder->status === 'preparing' ? '50%' : '90%') }};"></div>
 
+                    @foreach(['pending' => 'Ordered', 'preparing' => 'Preparing', 'on_delivery' => 'Delivery'] as $status => $label)
                     <div class="flex flex-col items-center relative z-10">
-                        <div class="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center mb-2">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <div class="w-12 h-12 {{ $activeOrder->status === $status || ($status === 'pending' && $activeOrder->status !== 'pending') ? 'bg-orange-500 border-4 border-orange-100' : 'bg-white border-4 border-zinc-50' }} rounded-full flex items-center justify-center mb-3 transition-colors">
+                            <svg class="w-5 h-5 {{ $activeOrder->status === $status || ($status === 'pending' && $activeOrder->status !== 'pending') ? 'text-white' : 'text-zinc-300' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if($status === 'pending') <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/> @endif
+                                @if($status === 'preparing') <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/> @endif
+                                @if($status === 'on_delivery') <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/> @endif
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-zinc-700">Preparing</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest {{ $activeOrder->status === $status ? 'text-orange-600' : 'text-zinc-400' }}">{{ $label }}</span>
                     </div>
-
-                    <div class="flex flex-col items-center relative z-10">
-                        <div class="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center mb-2">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
-                        </div>
-                        <span class="text-xs font-medium text-zinc-700">On Delivery</span>
-                    </div>
-
-                    <div class="flex flex-col items-center relative z-10">
-                        <div class="w-12 h-12 bg-zinc-200 rounded-full flex items-center justify-center mb-2">
-                            <svg class="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                        </div>
-                        <span class="text-xs font-medium text-zinc-700">Delivered</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 
-            <div class="bg-zinc-200/50 rounded-lg p-4 flex items-center gap-4">
-                <img src="https://ui-avatars.com/api/?name=Kenos+Bejir&background=f97316&color=fff&size=128" alt="Courier" class="w-14 h-14 rounded-full object-cover">
+            <div class="bg-zinc-50 rounded-2xl p-4 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-white border border-zinc-200 flex items-center justify-center">
+                    🚚
+                </div>
                 <div class="flex-1">
-                    <p class="text-xs text-zinc-600 mb-1">Your Courier</p>
-                    <h4 class="text-base font-semibold text-zinc-800">Kenos Bejir</h4>
+                    <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Courier assigned</p>
+                    <h4 class="text-sm font-bold text-zinc-800">Tracking Delivery...</h4>
                 </div>
-                <div class="flex gap-3">
-                    <button class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-zinc-50 transition">
-                        <svg class="w-5 h-5 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                        </svg>
-                    </button>
-                    <button class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-zinc-50 transition">
-                        <svg class="w-5 h-5 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                        </svg>
-                    </button>
-                </div>
+                <button @click="$dispatch('open-chat', { orderId: {{ $activeOrder->id }}, userType: 'user' })" class="bg-white px-4 py-2 rounded-xl text-xs font-bold text-orange-500 shadow-sm border border-orange-100 hover:bg-orange-50 transition">Chat Restaurant</button>
             </div>
         </div>
+        @else
+        <div class="bg-white rounded-3xl shadow-sm border border-zinc-100 p-12 text-center">
+            <div class="w-20 h-20 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">🍲</div>
+            <h3 class="text-xl font-bold text-zinc-800 mb-2">No active orders</h3>
+            <p class="text-zinc-500 mb-8 max-w-xs mx-auto">Hungry? Explore our delicious heritage menus and start your next culinary journey!</p>
+            <a href="{{ route('explore') }}" class="inline-block bg-[#B25C18] text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-orange-900/20 hover:scale-105 transition">Start Exploring</a>
+        </div>
+        @endif
 
+        <!-- Order History List -->
         <div>
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-zinc-800">Order History</h2>
-                <a href="#" class="text-sm text-orange-500 hover:text-orange-600 font-medium">View All</a>
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-zinc-800">Order History</h2>
+                    <p class="text-sm text-zinc-500">Your past culinary investments</p>
+                </div>
             </div>
 
             <div class="space-y-4">
-                <div class="bg-zinc-200/50 rounded-lg p-4 flex items-center gap-4">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=80&h=80&fit=crop" alt="Restaurant" class="w-16 h-16 rounded-lg object-cover">
+                @forelse($allOrders->where('status', 'completed') as $order)
+                <div class="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-6">
+                    <div class="w-16 h-16 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-400 font-bold text-xl">
+                        {{ $order->restaurant->name[0] }}
+                    </div>
                     <div class="flex-1">
-                        <h3 class="font-semibold text-zinc-800 mb-1">Warung Makan Barokah</h3>
-                        <p class="text-sm text-zinc-600">October 23, 2024 - 2 Items - Rp 67.000</p>
+                        <h3 class="font-bold text-zinc-800 text-lg mb-1">{{ $order->restaurant->name }}</h3>
+                        <div class="flex items-center gap-3 text-xs text-zinc-500">
+                            <span>{{ $order->created_at->format('M d, Y') }}</span>
+                            <span class="text-zinc-200">|</span>
+                            <span>{{ count($order->items) }} Items</span>
+                            <span class="text-zinc-200">|</span>
+                            <span class="font-bold text-zinc-700">@currency($order->total)</span>
+                        </div>
                     </div>
                     <div class="flex gap-2">
-                        <span class="bg-zinc-300/80 text-zinc-800/60 text-xs font-medium px-4 py-2 rounded-full">Delivered</span>
-                        <button class="bg-white text-green-600 text-xs font-medium px-4 py-2 rounded-full hover:bg-zinc-50 transition">Reorder</button>
+                        <span class="bg-zinc-100 text-zinc-500 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">Delivered</span>
+                        @if(!$order->review)
+                        <button @click="$dispatch('openReviewModal', { orderId: {{ $order->id }} })" class="bg-[#B25C18]/10 text-[#B25C18] text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:bg-[#B25C18]/20 transition">Review</button>
+                        @else
+                        <div class="flex items-center gap-1 bg-green-50 text-green-600 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">
+                            <span>⭐ {{ $order->review->rating }}</span>
+                        </div>
+                        @endif
+                        <a href="{{ route('restaurant.show', $order->restaurant_id) }}" class="bg-orange-50 text-orange-600 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full hover:bg-orange-100 transition">Reorder</a>
                     </div>
                 </div>
-
-                <div class="bg-zinc-200/50 rounded-lg p-4 flex items-center gap-4">
-                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=80&h=80&fit=crop" alt="Restaurant" class="w-16 h-16 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <h3 class="font-semibold text-zinc-800 mb-1">Sate Ayam Pak Haji</h3>
-                        <p class="text-sm text-zinc-600">October 18, 2024 - 3 Items - Rp 85.500</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <span class="bg-zinc-300/80 text-zinc-800/60 text-xs font-medium px-4 py-2 rounded-full">Delivered</span>
-                        <button class="bg-white text-green-600 text-xs font-medium px-4 py-2 rounded-full hover:bg-zinc-50 transition">Reorder</button>
-                    </div>
-                </div>
+                @empty
+                <p class="text-zinc-400 text-center py-10">No past orders found.</p>
+                @endforelse
             </div>
         </div>
     </div>
 
-    <div class="space-y-6">
-        <div class="bg-white rounded-lg shadow-sm p-5">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-zinc-800">Destination</h3>
-                <div class="flex items-center gap-2">
-                    <span class="bg-yellow-100/50 text-yellow-800 text-xs font-medium px-3 py-1 rounded-full">Home</span>
-                    <button class="text-xs text-orange-500 hover:text-orange-600 font-medium">Change Address</button>
+    <!-- Sidebar with Real Address Data -->
+    <div class="space-y-8">
+        <div class="bg-white rounded-3xl shadow-sm border border-zinc-100 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-bold text-zinc-800">Destination</h3>
+                @php $primaryAddress = $savedAddresses->where('is_primary', true)->first() ?? $savedAddresses->first(); @endphp
+                @if($primaryAddress)
+                    <span class="bg-orange-100 text-orange-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">{{ $primaryAddress->label }}</span>
+                @endif
+            </div>
+
+            @if($primaryAddress)
+            <div class="mb-6 rounded-2xl overflow-hidden border border-zinc-100 shadow-inner">
+                <div class="relative w-full h-40 bg-zinc-50">
+                    <!-- Dynamic map would go here, placeholder for now -->
+                    <div class="absolute inset-0 flex items-center justify-center text-zinc-300">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m6 13l5.447-2.724a1 1 0 011.447.894V5.618a1 1 0 01-1.447-.894L15 7m-6 13V7m6 10V7"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <div class="relative w-full h-48 bg-zinc-200 rounded-lg overflow-hidden">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.666!2d106.8229!3d-6.2088!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMzEuNyJTIDEwNsKwNDknMjIuNCJF!5e0!3m2!1sen!2sid!4v1234567890" 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy"
-                    ></iframe>
-                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-orange-500 rounded-full border-4 border-white shadow-lg"></div>
+            <div class="flex items-start gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
+                    📍
                 </div>
-            </div>
-
-            <div class="flex items-start gap-3 mb-4">
-                <svg class="w-5 h-5 text-orange-500 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg>
                 <div class="flex-1">
-                    <h4 class="font-semibold text-zinc-800 mb-1">Home</h4>
-                    <p class="text-sm text-zinc-600">Jl. Merdeka No. 123, Kelurahan Sudirman, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10310</p>
+                    <h4 class="font-bold text-zinc-800">{{ $primaryAddress->label }}</h4>
+                    <p class="text-xs text-zinc-500 leading-relaxed">{{ $primaryAddress->address_line }}, {{ $primaryAddress->city }}</p>
                 </div>
             </div>
-
-            <div class="bg-amber-100/50 rounded-lg p-4 mb-4">
-                <h4 class="text-sm font-semibold text-amber-900 mb-2">Delivery Notes</h4>
-                <p class="text-xs text-amber-800">Lokasi blok saya di Bf26 Cluster Permata Indah, pencet tombol ring di rumah nanti, makasih!</p>
+            @else
+            <div class="text-center py-8 bg-zinc-50 rounded-2xl mb-6">
+                <p class="text-xs text-zinc-400">No primary address set</p>
             </div>
+            @endif
 
-            <div>
-                <h4 class="text-sm font-medium text-zinc-500 mb-3">Other Saved Places</h4>
+            <div class="pt-6 border-t border-zinc-50">
+                <h4 class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-4">Saved Locations</h4>
                 <div class="space-y-2">
-                    <button class="w-full text-left p-3 bg-zinc-50 hover:bg-zinc-100 rounded-lg transition">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-zinc-600" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                            </svg>
-                            <span class="text-sm font-medium text-zinc-800">Work</span>
+                    @foreach($savedAddresses as $address)
+                    <div class="w-full flex items-center justify-between p-3 bg-zinc-50 rounded-xl transition group">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-bold text-zinc-800">{{ $address->label }}</span>
                         </div>
-                    </button>
+                        <button wire:click="deleteAddress({{ $address->id }})" class="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-red-500 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
 
-        <div class="bg-gradient-to-br from-amber-200 to-amber-700 rounded-lg shadow-sm p-5">
-            <h3 class="text-lg font-semibold text-amber-950 mb-2">Culinary Gold</h3>
-            <p class="text-sm text-amber-900 mb-4">Kamu membuka <span class="italic">free delivery</span> untuk 3 pesanan selanjutnya!</p>
-            <button class="w-full bg-white text-yellow-600 font-semibold text-sm py-2.5 rounded-full hover:bg-amber-50 transition">
-                Claim Benefits
+        <div class="bg-gradient-to-br from-zinc-800 to-black rounded-3xl shadow-xl p-8 text-white relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-orange-500/20 rounded-full blur-2xl"></div>
+            <h3 class="text-xl font-bold mb-2">Culinary Gold</h3>
+            <p class="text-xs text-zinc-400 mb-6 leading-relaxed">You've unlocked <span class="text-orange-400 font-bold">Free Delivery</span> for your next 3 orders!</p>
+            <button class="w-full bg-white text-black font-bold text-xs py-3 rounded-xl hover:bg-orange-50 transition">
+                Explore Premium
             </button>
         </div>
     </div>

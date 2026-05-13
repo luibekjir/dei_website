@@ -19,10 +19,24 @@ class Restaurant extends Model
         'latitude',
         'longitude',
         'facilities',
+        'has_delivery',
+        'supports_pickup',
+        'delivery_status',
+        'province_id',
+        'city_id',
+        'district_id',
+        'user_id',
+        'balance',
+        'bank_name',
+        'bank_account_number',
+        'bank_account_name',
     ];
 
     protected $casts = [
         'facilities' => 'array',
+        'has_delivery' => 'boolean',
+        'supports_pickup' => 'boolean',
+        'delivery_status' => 'string',
     ];
 
     public function category()
@@ -35,9 +49,34 @@ class Restaurant extends Model
         return $this->hasMany(Menu::class);
     }
 
+    public function menuItems()
+    {
+        return $this->hasMany(MenuItem::class);
+    }
+
+    public function deliveryRules()
+    {
+        return $this->hasMany(DeliveryRule::class);
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
     public function getBudgetRangeAttribute()
     {
-        $avgPrice = $this->menus()->avg('price');
+        $avgPrice = $this->menuItems()->avg('price');
 
         if (!$avgPrice) {
             return 'N/A';
@@ -57,5 +96,27 @@ class Restaurant extends Model
     public function addresses()
     {
         return $this->morphMany(Address::class, 'addressable');
+    }
+    /**
+     * Determine if delivery is currently available.
+     */
+    public function isDeliveryAvailable(): bool
+    {
+        return $this->has_delivery && $this->delivery_status === 'available';
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating') ?: 0, 1);
     }
 }
