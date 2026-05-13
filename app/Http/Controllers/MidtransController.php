@@ -16,6 +16,7 @@ class MidtransController extends Controller
         $validSignatureKey = hash("sha512", $notification->order_id . $notification->status_code . $notification->gross_amount . env('MIDTRANS_SERVER_KEY'));
 
         if ($notification->signature_key != $validSignatureKey) {
+            Log::error("Midtrans Notification Error: Invalid Signature Key for Order ID: " . ($notification->order_id ?? 'Unknown'));
             return response(['message' => 'Invalid signature'], 403);
         }
 

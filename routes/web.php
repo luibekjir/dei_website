@@ -13,7 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('restaurant.delivery-config');
     Route::redirect('dashboard', 'profile')->name('dashboard');
     Route::get('/restaurant/{restaurant}', [ExploreController::class, 'show'])->name('restaurant.show');
-    Route::get('/order', \App\Livewire\OrderComponent::class)->name('order');
+    Route::get('/order', \App\Livewire\OrderComponent::class)->name('order')->middleware('throttle:10,1');
 
   
     Route::get('/explore', [ExploreController::class, 'index']) ->name('explore');
@@ -24,7 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // Midtrans Endpoints
-Route::post('/midtrans/notification', [App\Http\Controllers\MidtransController::class, 'notification']);
+Route::post('/midtrans/notification', [App\Http\Controllers\MidtransController::class, 'notification'])->middleware('throttle:60,1');
 Route::get('/payment/finish', function() {
     return redirect()->route('profile.user')->with('success', 'Pembayaran berhasil dikonfirmasi!');
 })->name('payment.finish');
