@@ -75,7 +75,7 @@
                         <div class="flex flex-1 flex-col p-6">
                             <div class="flex items-start justify-between gap-4">
                                 <h3 class="text-xl font-bold text-[#1f1a17]">Saigon Street Eats</h3>
-                                <span class="shrink-0 text-base font-black text-[#955215]">$7.50</span>
+                                <span class="shrink-0 text-base font-black text-[#955215]">Rp 7.50</span>
                             </div>
                             <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51]">Authentic family recipes passed down through generations. Known for the...</p>
                             <div class="mt-6 flex flex-wrap gap-2">
@@ -96,7 +96,7 @@
                         <div class="flex flex-1 flex-col p-6">
                             <div class="flex items-start justify-between gap-4">
                                 <h3 class="text-xl font-bold text-[#1f1a17]">Abyssinia House</h3>
-                                <span class="shrink-0 text-base font-black text-[#955215]">$12.00</span>
+                                <span class="shrink-0 text-base font-black text-[#955215]">Rp 12.00</span>
                             </div>
                             <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51]">A communal dining experience featuring hand-stretched injera and spice-infused...</p>
                             <div class="mt-6 flex flex-wrap gap-2">
@@ -117,7 +117,7 @@
                         <div class="flex flex-1 flex-col p-6">
                             <div class="flex items-start justify-between gap-4">
                                 <h3 class="text-xl font-bold text-[#1f1a17]">Patagonia Pantry</h3>
-                                <span class="shrink-0 text-base font-black text-[#955215]">$4.00</span>
+                                <span class="shrink-0 text-base font-black text-[#955215]">Rp 4.00</span>
                             </div>
                             <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51]">The best flaky empanadas in town. Perfect for a quick bite or a full meal on...</p>
                             <div class="mt-6 flex flex-wrap gap-2">
@@ -172,7 +172,7 @@
                             <h3 class="text-base font-bold text-[#1f1a17]">Giant Indian Thali</h3>
                             <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Top Seller</span>
                         </div>
-                        <span class="text-sm font-bold text-[#955215]">$9.99</span>
+                        <span class="text-sm font-bold text-[#955215]">Rp 9.99</span>
                     </div>
                 </article>
 
@@ -186,7 +186,7 @@
                             <h3 class="text-base font-bold text-[#1f1a17]">Crispy Soy-Garlic...</h3>
                             <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Must Try</span>
                         </div>
-                        <span class="text-sm font-bold text-[#955215]">$11.50</span>
+                        <span class="text-sm font-bold text-[#955215]">Rp 11.50</span>
                     </div>
                 </article>
 
@@ -200,7 +200,7 @@
                             <h3 class="text-base font-bold text-[#1f1a17]">Miso Tonkotsu Ramen</h3>
                             <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Popular</span>
                         </div>
-                        <span class="text-sm font-bold text-[#955215]">$13.00</span>
+                        <span class="text-sm font-bold text-[#955215]">Rp 13.00</span>
                     </div>
                 </article>
 
@@ -214,7 +214,7 @@
                             <h3 class="text-base font-bold text-[#1f1a17]">Classic Ahi Poke Bowl</h3>
                             <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Fresh</span>
                         </div>
-                        <span class="text-sm font-bold text-[#955215]">$12.50</span>
+                        <span class="text-sm font-bold text-[#955215]">Rp 12.50</span>
                     </div>
                 </article>
             </div>

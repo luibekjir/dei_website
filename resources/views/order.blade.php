@@ -216,4 +216,4 @@
                 </div>
             </div>
         </div>
-</x-layouts::app>
+</x-layouts.app>
