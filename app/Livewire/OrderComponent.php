@@ -99,9 +99,11 @@ class OrderComponent extends Component
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
         
-        // Debugging: Disable SSL verification and force IPv4 for local development
+        \Midtrans\Config::$isProduction = (bool) env('MIDTRANS_IS_PRODUCTION', false);
+
+        // Custom cURL options: IPv4 for stability, SSL verification in production
         \Midtrans\Config::$curlOptions = [
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYPEER => \Midtrans\Config::$isProduction,
             CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             CURLOPT_HTTPHEADER => [], // Fix for SDK bug: Undefined array key 10023
         ];
