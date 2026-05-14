@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-7xl px-6 py-8">
         <header class="relative overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-[0_20px_60px_rgba(194,107,23,0.1)] lg:p-12">
             <div class="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-center">
-                <div class="h-64 w-full overflow-hidden rounded-[2rem] bg-[#F4E6D9] lg:h-80 lg:w-[450px]">
+                <div class="h-64 w-full overflow-hidden rounded-[2rem] bg-[#F4E6D9] lg:h-80 lg:w-[450px] shrink-0">
                     @if($restaurant->image)
                         <img src="{{ asset('storage/' . $restaurant->image) }}" alt="{{ $restaurant->name }}" class="h-full w-full object-cover" />
                     @else
@@ -87,8 +87,8 @@
             @if($highlightedMenu)
             <div class="mt-10">
                 <p class="text-[10px] uppercase tracking-[0.3em] text-[#B25C18] font-bold mb-6">Your Highlighted Selection</p>
-                <article class="overflow-hidden rounded-[2.5rem] border-2 border-[#B25C18] bg-[#FFF9F4] shadow-xl lg:flex">
-                    <div class="h-80 w-full lg:w-[400px] flex-shrink-0 overflow-hidden">
+                <article class="overflow-hidden rounded-[2.5rem] border-2 border-[#B25C18] bg-[#FFF9F4] shadow-xl flex flex-col lg:flex-row">
+                    <div class="h-64 w-full lg:h-80 lg:w-[400px] flex-shrink-0 overflow-hidden">
                         @if($highlightedMenu->image)
                             <img src="{{ asset('storage/' . $highlightedMenu->image) }}" alt="{{ $highlightedMenu->name }}" class="h-full w-full object-cover" />
                         @else
@@ -97,7 +97,7 @@
                             </div>
                         @endif
                     </div>
-                    <div class="p-10 flex flex-col justify-center space-y-6">
+                    <div class="p-8 lg:p-10 flex flex-col justify-center space-y-6">
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
                                 <span class="bg-[#B25C18] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Selected Choice</span>
@@ -105,11 +105,11 @@
                                     <span class="bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Halal</span>
                                 @endif
                             </div>
-                            <h3 class="text-4xl font-bold text-[#1D1D1B]">{{ $highlightedMenu->name }}</h3>
+                            <h3 class="text-3xl lg:text-4xl font-bold text-[#1D1D1B]">{{ $highlightedMenu->name }}</h3>
                         </div>
-                        <p class="text-lg text-[#6F5F51] leading-relaxed max-w-xl">{{ $highlightedMenu->description }}</p>
-                        <div class="flex items-center justify-between gap-6">
-                            <span class="text-3xl font-bold text-[#B25C18]">@currency($highlightedMenu->price)</span>
+                        <p class="text-base lg:text-lg text-[#6F5F51] leading-relaxed max-w-xl">{{ $highlightedMenu->description }}</p>
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6">
+                            <span class="text-2xl lg:text-3xl font-bold text-[#B25C18]">@currency($highlightedMenu->price)</span>
                             <button wire:click="addToOrder({{ $highlightedMenu->id }})" class="rounded-full bg-[#B25C18] px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#8F4C11] active:scale-95">
                                 + Add to Order
                             </button>

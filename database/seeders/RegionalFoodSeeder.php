@@ -29,7 +29,7 @@ class RegionalFoodSeeder extends Seeder
                 'price' => 45000,
                 'spice_level' => 3,
                 'is_halal' => true,
-                'image' => 'rawon.jpg'
+                'image' => 'rawon.png'
             ],
             [
                 'name' => 'Rendang Daging',
@@ -40,7 +40,7 @@ class RegionalFoodSeeder extends Seeder
                 'price' => 55000,
                 'spice_level' => 4,
                 'is_halal' => true,
-                'image' => 'rendang.jpg'
+                'image' => 'rendang.png'
             ],
             [
                 'name' => 'Gudeg Jogja',
@@ -51,7 +51,7 @@ class RegionalFoodSeeder extends Seeder
                 'price' => 35000,
                 'spice_level' => 1,
                 'is_halal' => true,
-                'image' => 'gudeg.jpg'
+                'image' => 'gudeg.png'
             ],
             [
                 'name' => 'Pempek Kapal Selam',
@@ -62,7 +62,7 @@ class RegionalFoodSeeder extends Seeder
                 'price' => 25000,
                 'spice_level' => 3,
                 'is_halal' => true,
-                'image' => 'pempek.jpg'
+                'image' => 'pempek.png'
             ],
             [
                 'name' => 'Coto Makassar',
@@ -73,7 +73,7 @@ class RegionalFoodSeeder extends Seeder
                 'price' => 40000,
                 'spice_level' => 2,
                 'is_halal' => true,
-                'image' => 'coto.jpg'
+                'image' => 'coto.png'
             ],
             [
                 'name' => 'Ayam Betutu',
@@ -84,7 +84,7 @@ class RegionalFoodSeeder extends Seeder
                 'price' => 85000,
                 'spice_level' => 5,
                 'is_halal' => true,
-                'image' => 'betutu.jpg'
+                'image' => 'betutu.png'
             ],
         ];
 

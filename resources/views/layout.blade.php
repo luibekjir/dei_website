@@ -15,31 +15,30 @@
                         A sensory guide helping migrants and travelers discover authentic local flavors without breaking the bank. Your digital kitchen table awaits.
                     </p>
 
-                    <div class="mt-10 inline-flex flex-col items-center rounded-[2rem] bg-[#f8f4ec] p-2 shadow-sm sm:flex-row">
-                        <div class="flex items-center gap-3 px-4 py-2 sm:px-6">
+                    <div class="mt-10 flex flex-col items-stretch rounded-[2rem] bg-[#f8f4ec] p-2 shadow-sm sm:inline-flex sm:flex-row sm:items-center">
+                        <div class="flex items-center gap-3 px-4 py-3 sm:px-6">
                             <svg class="h-5 w-5 text-[#955215]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span class="text-sm text-[#8c7f72] whitespace-nowrap">Where are<br>you eating?</span>
+                            <span class="text-sm text-[#8c7f72] whitespace-nowrap">Where are<br class="hidden sm:block"> you eating?</span>
                         </div>
-                        <div class="hidden h-10 w-px bg-[#e6dbce] sm:block"></div>
-                        <div class="flex items-center gap-3 px-4 py-2 sm:px-6">
+                        <div class="h-px w-full bg-[#e6dbce] sm:h-10 sm:w-px"></div>
+                        <div class="flex items-center gap-3 px-4 py-3 sm:px-6">
                             <svg class="h-5 w-5 text-[#955215]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                             <span class="flex items-center gap-2 text-sm text-[#8c7f72]">
-                                Budget (A 
+                                Budget
                                 <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                )
                             </span>
                         </div>
-                        <button class="mt-2 w-full rounded-full bg-[#955215] px-8 py-3.5 text-sm font-bold text-white transition hover:bg-[#7a4210] sm:mt-0 sm:ml-2 sm:w-auto">
+                        <button class="mt-2 w-full rounded-full bg-[#955215] px-8 py-4 text-sm font-bold text-white transition hover:bg-[#7a4210] sm:mt-0 sm:ml-2 sm:w-auto">
                             Search
                         </button>
                     </div>
                 </div>
 
-                <div class="relative flex items-center justify-center gap-4 sm:gap-6 lg:justify-end">
-                    <div class="z-10 h-[320px] w-[240px] shrink-0 overflow-hidden rounded-[2rem] shadow-xl sm:h-[380px] sm:w-[280px]">
+                <div class="relative flex items-center justify-center gap-4 sm:gap-6 lg:justify-end overflow-x-hidden py-8 lg:py-0">
+                    <div class="z-10 h-[280px] w-[200px] shrink-0 overflow-hidden rounded-[2rem] shadow-xl sm:h-[380px] sm:w-[280px]">
                         <img src="{{ asset('images/makanan1.png') }}" alt="Hero Image 1" class="h-full w-full object-cover">
                     </div>
-                    <div class="flex h-[260px] w-[240px] shrink-0 items-center justify-center overflow-hidden rounded-[2rem] bg-white shadow-xl sm:h-[300px] sm:w-[260px]">
+                    <div class="flex h-[220px] w-[200px] shrink-0 items-center justify-center overflow-hidden rounded-[2rem] bg-white shadow-xl sm:h-[300px] sm:w-[260px]">
                         <img src="{{ asset('images/makanan2.png') }}" alt="Hero Image 2" class="h-full w-full object-contain p-4">
                     </div>
                 </div>

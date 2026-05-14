@@ -1,6 +1,6 @@
 <x-layouts::app :title="__('Explore Culinary Treasures')">
-    <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A]">
-        <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+    <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A] py-12">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
             
             <header class="text-center space-y-4 mb-16">
                 <p class="text-[10px] uppercase tracking-[0.4em] text-[#AB7B45] font-bold">Curated Heritage • Modern Flavors</p>
@@ -10,7 +10,7 @@
 
             <!-- Map View -->
             <section class="mb-16 rounded-[2.5rem] overflow-hidden border border-[#F0DECB] shadow-sm bg-white">
-                <div id="map" class="h-[400px] w-full z-0"></div>
+                <div id="map" class="h-[300px] md:h-[400px] w-full z-0"></div>
             </section>
 
             @if(auth()->check() && $recommendations->count() > 0)
@@ -24,7 +24,7 @@
                     <span class="text-2xl">🏠</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach($recommendations as $menu)
                     <a href="{{ route('restaurant.show', [$menu->restaurant_id, 'highlight' => $menu->id]) }}" class="group relative overflow-hidden rounded-[2rem] bg-white border border-[#F0DECB] shadow-sm hover:shadow-xl transition-all duration-500">
                         <div class="h-48 overflow-hidden relative">
@@ -52,14 +52,32 @@
             </section>
             @endif
 
-            <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-12">
+            <div x-data="{ mobileFiltersOpen: false }" class="flex flex-col lg:flex-row gap-12">
+                <!-- Mobile Filter Toggle -->
+                <div class="lg:hidden">
+                    <button @click="mobileFiltersOpen = !mobileFiltersOpen" class="w-full flex items-center justify-between bg-white border border-[#F0DECB] rounded-2xl px-6 py-4 text-sm font-bold text-[#AB7B45] shadow-sm">
+                        <span class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            Filter Heritage Selection
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" :class="{ 'rotate-180': mobileFiltersOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </div>
+
                 <!-- Filters Sidebar -->
-                <aside class="space-y-10">
+                <aside 
+                    :class="mobileFiltersOpen ? 'block' : 'hidden lg:block'"
+                    class="w-full lg:w-[300px] shrink-0 space-y-10"
+                >
                     <section>
                         <h2 class="text-sm font-bold uppercase tracking-widest text-[#AB7B45] mb-6">Filter by Region</h2>
                         <livewire:region-filter />
                     </section>
-
+                    
                     <form action="{{ route('explore') }}" method="GET" class="space-y-10">
                         <section>
                             <h2 class="text-sm font-bold uppercase tracking-widest text-[#AB7B45] mb-6">Search</h2>
@@ -109,7 +127,7 @@
                 </aside>
 
                 <!-- Results Grid -->
-                <main class="space-y-8">
+                <main class="flex-1 space-y-8 min-w-0">
                     <div class="flex items-center justify-between">
                         <p class="text-sm text-[#6F5F51] font-medium">Showing <span class="text-[#1D1D1B] font-bold">{{ count($menus) }}</span> curated treasures</p>
                         <div class="flex items-center gap-2 text-xs font-bold text-[#AB7B45] uppercase tracking-wider">
