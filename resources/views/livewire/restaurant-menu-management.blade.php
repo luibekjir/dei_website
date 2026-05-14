@@ -73,23 +73,23 @@
     <!-- Modal for Adding Item -->
     @if($showItemForm)
         <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div class="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-                <div class="p-10">
+            <div class="bg-white rounded-[2.5rem] w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300">
+                <div class="p-6 md:p-10">
                     <div class="flex justify-between items-center mb-8">
                         <div>
-                            <h3 class="text-3xl font-bold text-[#1D1D1B]">{{ $editingItemId ? 'Edit Dish' : 'Add New Dish' }}</h3>
-                            <p class="text-sm text-zinc-500 mt-1">Specify the culinary heritage of your menu</p>
+                            <h3 class="text-2xl md:text-3xl font-black text-[#1D1D1B] tracking-tight">{{ $editingItemId ? 'Edit Dish' : 'Add New Dish' }}</h3>
+                            <p class="text-xs md:text-sm text-zinc-500 mt-1">Specify the culinary heritage of your menu</p>
                         </div>
-                        <button wire:click="$set('showItemForm', false)" class="text-zinc-300 hover:text-zinc-500 transition-colors">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button wire:click="$set('showItemForm', false)" class="p-2 rounded-xl hover:bg-zinc-100 transition-colors">
+                            <svg class="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
 
                     <div class="space-y-6">
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                             <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Province Origin</label>
-                                <select wire:model.live="itemProvinceId" class="w-full bg-zinc-50 border-zinc-200 rounded-2xl py-4 px-6 focus:ring-[#B25C18] focus:border-[#B25C18] text-sm">
+                                <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">Province Origin</label>
+                                <select wire:model.live="itemProvinceId" class="w-full bg-zinc-50 border-zinc-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-[#B25C18] outline-none text-sm transition-all">
                                     <option value="">Select Province</option>
                                     @foreach($provinces as $province)
                                         <option value="{{ $province->id }}">{{ $province->name }}</option>
@@ -97,8 +97,8 @@
                                 </select>
                             </div>
                             <div class="space-y-2">
-                                <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">City Heritage</label>
-                                <select wire:model="itemCityId" @disabled(!$itemProvinceId) class="w-full bg-zinc-50 border-zinc-200 rounded-2xl py-4 px-6 focus:ring-[#B25C18] focus:border-[#B25C18] text-sm disabled:opacity-50">
+                                <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">City Heritage</label>
+                                <select wire:model="itemCityId" @disabled(!$itemProvinceId) class="w-full bg-zinc-50 border-zinc-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-[#B25C18] outline-none text-sm disabled:opacity-50 transition-all">
                                     <option value="">Select City (e.g. Padang, Solo)</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city->id }}">{{ $city->name }}</option>
@@ -108,29 +108,29 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Dish Name</label>
-                            <input type="text" wire:model.defer="itemName" placeholder="e.g. Rendang Daging, Gudeg" class="w-full bg-zinc-50 border-zinc-200 rounded-2xl py-4 px-6 focus:ring-[#B25C18] focus:border-[#B25C18] text-sm">
+                            <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">Dish Name</label>
+                            <input type="text" wire:model.defer="itemName" placeholder="e.g. Rendang Daging, Gudeg" class="w-full bg-zinc-50 border-zinc-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-[#B25C18] outline-none text-sm transition-all">
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Description</label>
-                            <textarea wire:model.defer="itemDescription" rows="2" placeholder="Tell customers what makes it special..." class="w-full bg-zinc-50 border-zinc-200 rounded-2xl py-4 px-6 focus:ring-[#B25C18] focus:border-[#B25C18] text-sm"></textarea>
+                            <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">Description</label>
+                            <textarea wire:model.defer="itemDescription" rows="3" placeholder="Tell customers what makes it special..." class="w-full bg-zinc-50 border-zinc-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-[#B25C18] outline-none text-sm transition-all"></textarea>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Price (IDR)</label>
-                            <input type="number" wire:model.defer="itemPrice" placeholder="0" class="w-full bg-zinc-50 border-zinc-200 rounded-2xl py-4 px-6 focus:ring-[#B25C18] focus:border-[#B25C18] text-sm">
+                            <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">Price (IDR)</label>
+                            <input type="number" wire:model.defer="itemPrice" placeholder="0" class="w-full bg-zinc-50 border-zinc-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-[#B25C18] outline-none text-sm transition-all">
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">Foto Masakan</label>
-                            <div class="relative group h-32 w-full bg-zinc-50 border-2 border-dashed border-zinc-200 rounded-2xl overflow-hidden flex items-center justify-center transition-all hover:bg-zinc-100">
+                            <div class="relative group h-40 w-full bg-zinc-50 border-2 border-dashed border-zinc-200 rounded-3xl overflow-hidden flex items-center justify-center transition-all hover:bg-zinc-100">
                                 @if($itemImage)
                                     <img src="{{ $itemImage->temporaryUrl() }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="text-center space-y-1">
-                                        <svg class="w-8 h-8 text-zinc-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                        <p class="text-[10px] font-bold text-zinc-400">Click to upload photo</p>
+                                    <div class="text-center space-y-2">
+                                        <svg class="w-10 h-10 text-zinc-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        <p class="text-[10px] font-bold text-zinc-400">Click to upload brand photo</p>
                                     </div>
                                 @endif
                                 <input type="file" wire:model="itemImage" class="absolute inset-0 opacity-0 cursor-pointer">
@@ -140,7 +140,7 @@
                             </div>
                         </div>
 
-                        <button wire:click="{{ $editingItemId ? 'updateItem' : 'addItem' }}" class="w-full bg-[#B25C18] text-white py-5 rounded-2xl font-bold shadow-xl shadow-orange-900/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
+                        <button wire:click="{{ $editingItemId ? 'updateItem' : 'addItem' }}" class="w-full bg-[#B25C18] text-white py-6 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-900/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
                             {{ $editingItemId ? 'Save Changes' : 'Add to Menu' }}
                         </button>
                     </div>

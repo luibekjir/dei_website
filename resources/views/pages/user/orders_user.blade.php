@@ -29,37 +29,37 @@
                 </div>
             </div>
 
-            <div class="mb-10 px-4">
+            <div class="mb-10 px-0 sm:px-4">
                 <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">Delivery Progress</h4>
                 <div class="flex items-center justify-between relative">
-                    <div class="absolute top-6 left-0 right-0 h-1 bg-zinc-100 rounded-full"></div>
-                    <div class="absolute top-6 left-0 h-1 bg-orange-500 rounded-full transition-all duration-1000" 
+                    <div class="absolute top-5 sm:top-6 left-0 right-0 h-1 bg-zinc-100 rounded-full"></div>
+                    <div class="absolute top-5 sm:top-6 left-0 h-1 bg-orange-500 rounded-full transition-all duration-1000" 
                          style="width: {{ $activeOrder->status === 'pending' ? '10%' : ($activeOrder->status === 'preparing' ? '50%' : '90%') }};"></div>
 
                     @foreach(['pending' => 'Ordered', 'preparing' => 'Preparing', 'on_delivery' => 'Delivery'] as $status => $label)
                     <div class="flex flex-col items-center relative z-10">
-                        <div class="w-12 h-12 {{ $activeOrder->status === $status || ($status === 'pending' && $activeOrder->status !== 'pending') ? 'bg-orange-500 border-4 border-orange-100' : 'bg-white border-4 border-zinc-50' }} rounded-full flex items-center justify-center mb-3 transition-colors">
-                            <svg class="w-5 h-5 {{ $activeOrder->status === $status || ($status === 'pending' && $activeOrder->status !== 'pending') ? 'text-white' : 'text-zinc-300' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 {{ $activeOrder->status === $status || ($status === 'pending' && $activeOrder->status !== 'pending') ? 'bg-orange-500 border-4 border-orange-100' : 'bg-white border-4 border-zinc-50' }} rounded-full flex items-center justify-center mb-3 transition-colors">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 {{ $activeOrder->status === $status || ($status === 'pending' && $activeOrder->status !== 'pending') ? 'text-white' : 'text-zinc-300' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 @if($status === 'pending') <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/> @endif
                                 @if($status === 'preparing') <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/> @endif
                                 @if($status === 'on_delivery') <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/> @endif
                             </svg>
                         </div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest {{ $activeOrder->status === $status ? 'text-orange-600' : 'text-zinc-400' }}">{{ $label }}</span>
+                        <span class="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest {{ $activeOrder->status === $status ? 'text-orange-600' : 'text-zinc-400' }}">{{ $label }}</span>
                     </div>
                     @endforeach
                 </div>
             </div>
 
-            <div class="bg-zinc-50 rounded-2xl p-4 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-white border border-zinc-200 flex items-center justify-center">
+            <div class="bg-zinc-50 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-white border border-zinc-200 flex items-center justify-center shrink-0">
                     🚚
                 </div>
-                <div class="flex-1">
+                <div class="flex-1 text-center sm:text-left">
                     <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Courier assigned</p>
                     <h4 class="text-sm font-bold text-zinc-800">Tracking Delivery...</h4>
                 </div>
-                <button @click="$dispatch('open-chat', { orderId: {{ $activeOrder->id }}, userType: 'user' })" class="bg-white px-4 py-2 rounded-xl text-xs font-bold text-orange-500 shadow-sm border border-orange-100 hover:bg-orange-50 transition">Chat Restaurant</button>
+                <button @click="$dispatch('open-chat', { orderId: {{ $activeOrder->id }}, userType: 'user' })" class="w-full sm:w-auto bg-white px-4 py-2 rounded-xl text-xs font-bold text-orange-500 shadow-sm border border-orange-100 hover:bg-orange-50 transition">Chat Restaurant</button>
             </div>
         </div>
         @else

@@ -8,22 +8,43 @@ use Livewire\Component;
 class OrderComponent extends Component
 {
     public $items = [];
-    public $subtotal = 330000;
-    public $taxes = 33000;
-    public $deliveryFee = 19000;
-    public $negotiatedDeliveryFee = 19000;
+    public $subtotal = 0;
+    public $taxes = 0;
+    public $deliveryFee = 0;
+    public $negotiatedDeliveryFee = 0;
     public $negotiationMessage;
     public $negotiationStatus = 'none';
-    public $total = 382000;
+    public $total = 0;
+    public $orderType = 'delivery';
+    public $restaurant;
 
     public function mount()
     {
         // Load from session cart
         $this->items = session()->get('cart', []);
         
-        $this->deliveryFee = 19000;
-        $this->negotiatedDeliveryFee = $this->deliveryFee;
+        $restaurantId = !empty($this->items) ? reset($this->items)['restaurant_id'] : null;
+        $this->restaurant = $restaurantId ? \App\Models\Restaurant::find($restaurantId) : null;
+
+        if ($this->restaurant) {
+            // Default to pickup if delivery is not available
+            if (!$this->restaurant->has_delivery && $this->restaurant->supports_pickup) {
+                $this->orderType = 'pickup';
+            }
+        }
+
         $this->calculateTotal();
+        $this->negotiatedDeliveryFee = $this->deliveryFee;
+    }
+
+    public function setOrderType($type)
+    {
+        if (in_array($type, ['delivery', 'pickup'])) {
+            $this->orderType = $type;
+            $this->calculateTotal();
+            $this->negotiatedDeliveryFee = $this->deliveryFee;
+            $this->negotiationStatus = 'none';
+        }
     }
 
     public function updateQuantity($index, $quantity)
@@ -209,7 +230,7 @@ class OrderComponent extends Component
             'delivery_fee' => $this->deliveryFee,
             'total' => $this->total,
             'status' => $this->paymentStatus === 'success' ? 'confirmed' : 'pending',
-            'type' => 'delivery',
+            'type' => $this->orderType,
             'midtrans_order_id' => $this->currentOrderId,
         ]);
 
@@ -222,23 +243,27 @@ class OrderComponent extends Component
         $this->subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $this->items));
         $this->taxes = $this->subtotal * 0.1; // 10% tax
         
-        // Calculate flexible delivery fee
-        $baseFee = 19000;
-        $itemsCount = array_sum(array_column($this->items, 'quantity'));
-        
-        $restaurantId = !empty($this->items) ? reset($this->items)['restaurant_id'] : null;
-        $restaurant = $restaurantId ? \App\Models\Restaurant::find($restaurantId) : null;
-        if ($restaurant) {
-            $rules = $restaurant->deliveryRules()->where('is_active', true)->get();
-            $bestFee = $baseFee;
+        if ($this->orderType === 'pickup') {
+            $this->deliveryFee = 0;
+        } else {
+            // Calculate flexible delivery fee
+            $baseFee = 19000;
+            $itemsCount = array_sum(array_column($this->items, 'quantity'));
             
-            foreach ($rules as $rule) {
-                $calculated = $rule->calculateFee($itemsCount, $this->subtotal, $baseFee);
-                if ($calculated < $bestFee) {
-                    $bestFee = $calculated;
+            if ($this->restaurant) {
+                $rules = $this->restaurant->deliveryRules()->where('is_active', true)->get();
+                $bestFee = $baseFee;
+                
+                foreach ($rules as $rule) {
+                    $calculated = $rule->calculateFee($itemsCount, $this->subtotal, $baseFee);
+                    if ($calculated < $bestFee) {
+                        $bestFee = $calculated;
+                    }
                 }
+                $this->deliveryFee = $bestFee;
+            } else {
+                $this->deliveryFee = $baseFee;
             }
-            $this->deliveryFee = $bestFee;
         }
 
         $this->total = $this->subtotal + $this->taxes + $this->deliveryFee;

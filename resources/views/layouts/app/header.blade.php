@@ -7,12 +7,13 @@
 
 <body class="min-h-screen bg-[#FFF8F0]">
     <flux:header class="flex items-center justify-between px-6 py-4 bg-[#FFF8F0] border-b border-zinc-200">
-
-        <!-- LEFT: Logo -->
-        <div class="flex items-center space-x-2">
-            <span class="text-lg font-semibold text-zinc-800">
-                <a href="{{ route('home') }}" class="hover:text-black transition">
-                    CulinaryAtelier
+        <!-- LEFT: Logo & Toggle -->
+        <div class="flex items-center space-x-4">
+            <flux:sidebar.toggle class="md:hidden -ml-2" icon="bars-3" inset="left" />
+            
+            <span class="text-lg font-black text-[#1D1D1B] tracking-tight uppercase">
+                <a href="{{ route('home') }}" class="hover:text-[#B25C18] transition">
+                    Culinary<span class="text-[#B25C18]">Atelier</span>
                 </a>
             </span>
         </div>
@@ -67,25 +68,25 @@
         </flux:sidebar.header>
 
         <flux:sidebar.nav>
-            <flux:sidebar.group :heading="__('Platform')">
-                <flux:sidebar.item icon="layout-grid" :href="route('dashboard')"
-                    :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
+            <flux:sidebar.group :heading="__('Explore')">
+                <flux:sidebar.item icon="map" :href="route('explore')" :current="request()->routeIs('explore')" wire:navigate>
+                    {{ __('Explore Cuisines') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="sparkles" :href="route('explore.random')" wire:navigate>
+                    {{ __('Surprise Me!') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
-        </flux:sidebar.nav>
 
-        <flux:spacer />
-
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
-                target="_blank">
-                {{ __('Repository') }}
-            </flux:sidebar.item>
-            <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire"
-                target="_blank">
-                {{ __('Documentation') }}
-            </flux:sidebar.item>
+            @auth
+            <flux:sidebar.group :heading="__('User')">
+                <flux:sidebar.item icon="user-circle" :href="route('profile.user')" :current="request()->routeIs('profile.user')" wire:navigate>
+                    {{ __('My Profile') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="shopping-bag" :href="route('order')" :current="request()->routeIs('order')" wire:navigate>
+                    {{ __('My Orders') }}
+                </flux:sidebar.item>
+            </flux:sidebar.group>
+            @endauth
         </flux:sidebar.nav>
     </flux:sidebar>
 

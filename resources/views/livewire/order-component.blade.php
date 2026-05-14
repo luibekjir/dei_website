@@ -55,49 +55,80 @@
 
                     <section class="space-y-8">
                         <div class="flex items-center gap-4">
-                            <div class="h-12 w-12 rounded-2xl bg-orange-50 flex items-center justify-center text-xl">🚚</div>
+                            <div class="h-12 w-12 rounded-2xl bg-orange-50 flex items-center justify-center text-xl">
+                                {{ $orderType === 'delivery' ? '🚚' : '🏪' }}
+                            </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-[#1D1D1B]">Delivery Preferences</h2>
-                                <p class="text-sm text-[#6F5F51]">Adjust how your heritage reaches you.</p>
+                                <h2 class="text-2xl font-bold text-[#1D1D1B]">Order Preferences</h2>
+                                <p class="text-sm text-[#6F5F51]">Choose how you want to receive your order.</p>
                             </div>
                         </div>
 
-                        <!-- Negotiation Section -->
-                        <div class="p-8 bg-white rounded-[2.5rem] border border-[#F0DECB]">
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-[#AB7B45] mb-6">Delivery Fee Negotiation</h3>
-                            
-                            @if($negotiationStatus === 'none')
-                                <div class="flex flex-col sm:flex-row items-center gap-4">
-                                    <div class="flex items-center bg-[#FCE9D9] rounded-full p-1 flex-1 w-full sm:w-auto">
-                                        <button wire:click="adjustNegotiatedFee(-1000)" class="h-10 w-10 flex items-center justify-center rounded-full text-[#B25C18] hover:bg-white transition-colors">−</button>
-                                        <span class="flex-1 text-center font-bold text-[#1D1D1B]">@currency($negotiatedDeliveryFee)</span>
-                                        <button wire:click="adjustNegotiatedFee(1000)" class="h-10 w-10 flex items-center justify-center rounded-full text-[#B25C18] hover:bg-white transition-colors">+</button>
-                                    </div>
-                                    <button wire:click="negotiateDeliveryFee" class="w-full sm:w-auto bg-[#B25C18] text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-[#8F4C11] transition-colors">
-                                        Nego Now
-                                    </button>
-                                </div>
-                                <p class="mt-4 text-[10px] text-[#AB7B45] uppercase tracking-wider">Default fee: @currency($deliveryFee)</p>
-                            @elseif($negotiationStatus === 'pending')
-                                <div class="space-y-4 animate-pulse">
-                                    <p class="text-sm font-bold text-[#B25C18]">Waiting for driver's response...</p>
-                                    <div class="flex gap-3">
-                                        <button wire:click="simulateDriverResponse" class="bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Mock Accept</button>
-                                        <button wire:click="rejectNegotiation" class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Mock Reject</button>
-                                    </div>
-                                </div>
-                            @elseif($negotiationStatus === 'accepted')
-                                <div class="flex items-center gap-3 text-green-600 font-bold">
-                                    <span>✅ Negotiation Accepted!</span>
-                                    <span class="text-sm px-3 py-1 bg-green-50 rounded-full">New Fee: @currency($deliveryFee)</span>
-                                </div>
-                            @elseif($negotiationStatus === 'rejected')
-                                <div class="flex items-center justify-between">
-                                    <span class="text-red-600 font-bold">❌ Driver declined.</span>
-                                    <button wire:click="$set('negotiationStatus', 'none')" class="text-xs font-bold text-[#B25C18] hover:underline uppercase">Try Again</button>
-                                </div>
+                        <!-- Order Type Selection -->
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 p-2 sm:p-1 bg-[#FCE9D9] rounded-3xl sm:rounded-2xl w-full sm:w-fit">
+                            @if($restaurant?->has_delivery)
+                                <button wire:click="setOrderType('delivery')" 
+                                    class="flex-1 px-8 py-3 rounded-2xl sm:rounded-xl font-bold transition-all {{ $orderType === 'delivery' ? 'bg-[#B25C18] text-white shadow-lg' : 'text-[#B25C18] hover:bg-white/50' }}">
+                                    Delivery
+                                </button>
+                            @endif
+                            @if($restaurant?->supports_pickup)
+                                <button wire:click="setOrderType('pickup')" 
+                                    class="flex-1 px-8 py-3 rounded-2xl sm:rounded-xl font-bold transition-all {{ $orderType === 'pickup' ? 'bg-[#B25C18] text-white shadow-lg' : 'text-[#B25C18] hover:bg-white/50' }}">
+                                    Pickup
+                                </button>
                             @endif
                         </div>
+
+                        <!-- Contextual Section -->
+                        @if($orderType === 'delivery')
+                            <div class="p-8 bg-white rounded-[2.5rem] border border-[#F0DECB]">
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-[#AB7B45] mb-6">Delivery Fee Negotiation</h3>
+                                
+                                @if($negotiationStatus === 'none')
+                                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                                        <div class="flex items-center bg-[#FCE9D9] rounded-full p-1 flex-1 w-full sm:w-auto">
+                                            <button wire:click="adjustNegotiatedFee(-1000)" class="h-10 w-10 flex items-center justify-center rounded-full text-[#B25C18] hover:bg-white transition-colors">−</button>
+                                            <span class="flex-1 text-center font-bold text-[#1D1D1B]">@currency($negotiatedDeliveryFee)</span>
+                                            <button wire:click="adjustNegotiatedFee(1000)" class="h-10 w-10 flex items-center justify-center rounded-full text-[#B25C18] hover:bg-white transition-colors">+</button>
+                                        </div>
+                                        <button wire:click="negotiateDeliveryFee" class="w-full sm:w-auto bg-[#B25C18] text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-[#8F4C11] transition-colors">
+                                            Nego Now
+                                        </button>
+                                    </div>
+                                    <p class="mt-4 text-[10px] text-[#AB7B45] uppercase tracking-wider">Default fee: @currency($deliveryFee)</p>
+                                @elseif($negotiationStatus === 'pending')
+                                    <div class="space-y-4 animate-pulse">
+                                        <p class="text-sm font-bold text-[#B25C18]">Waiting for driver's response...</p>
+                                        <div class="flex gap-3">
+                                            <button wire:click="simulateDriverResponse" class="bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Mock Accept</button>
+                                            <button wire:click="rejectNegotiation" class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Mock Reject</button>
+                                        </div>
+                                    </div>
+                                @elseif($negotiationStatus === 'accepted')
+                                    <div class="flex items-center gap-3 text-green-600 font-bold">
+                                        <span>✅ Negotiation Accepted!</span>
+                                        <span class="text-sm px-3 py-1 bg-green-50 rounded-full">New Fee: @currency($deliveryFee)</span>
+                                    </div>
+                                @elseif($negotiationStatus === 'rejected')
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-red-600 font-bold">❌ Driver declined.</span>
+                                        <button wire:click="$set('negotiationStatus', 'none')" class="text-xs font-bold text-[#B25C18] hover:underline uppercase">Try Again</button>
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="p-8 bg-white rounded-[2.5rem] border border-[#F0DECB] flex flex-col md:flex-row items-center gap-6">
+                                <div class="h-20 w-20 rounded-3xl bg-[#FEF6ED] flex items-center justify-center text-3xl shadow-inner">🏪</div>
+                                <div class="flex-1 text-center md:text-left">
+                                    <h3 class="text-xl font-bold text-[#1D1D1B]">Self-Pickup Order</h3>
+                                    <p class="text-sm text-[#6F5F51] mt-1">Anda akan mengambil pesanan langsung di restoran. Tidak ada biaya pengiriman.</p>
+                                    <div class="mt-4 inline-flex items-center gap-2 text-[10px] font-bold text-[#B25C18] uppercase tracking-widest bg-[#FCE9D9] px-3 py-1 rounded-full">
+                                        📍 {{ $restaurant->address ?? 'Lokasi Restoran' }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </section>
                 </div>
 
