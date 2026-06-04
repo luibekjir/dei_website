@@ -325,5 +325,8 @@
                 </div>
             </div>
         </footer>
+        
+        <!-- AI Chatbot Component -->
+        @include('components.chatbot')
     </div>
 </x-layouts::app>

@@ -17,20 +17,11 @@ class ExploreController extends Controller
         $menus = $query->get();
         $categories = Category::all();
 
-        // Recommendations based on User's origin
+        // Recommendations based on User's origin and preferences
         $recommendations = collect();
         if (auth()->check()) {
-            $user = auth()->user();
-            if ($user->province_id || $user->city_id) {
-                $recommendations = MenuItem::with(['restaurant.category', 'city'])
-                    ->where(function ($q) use ($user) {
-                        $q->where('province_id', $user->province_id)
-                          ->orWhere('city_id', $user->city_id);
-                    })
-                    ->inRandomOrder()
-                    ->take(4)
-                    ->get();
-            }
+            $recommendationService = new \App\Services\RecommendationService();
+            $recommendations = $recommendationService->getRecommendations(auth()->user(), 4);
         }
 
         // User's primary address for map center

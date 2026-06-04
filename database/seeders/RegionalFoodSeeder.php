@@ -15,10 +15,6 @@ class RegionalFoodSeeder extends Seeder
 {
     public function run(): void
     {
-        MenuItem::truncate();
-        Menu::truncate();
-        Restaurant::truncate();
-
         $foods = [
             [
                 'name' => 'Rawon Setan',

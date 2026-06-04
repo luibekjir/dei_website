@@ -285,18 +285,18 @@
     @if($showRestaurantModal)
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-[3rem] w-full max-w-5xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-            <div class="flex flex-col md:flex-row h-[85vh]">
+            <div class="flex flex-col md:flex-row h-[90vh] md:h-[85vh]">
                 <!-- Map Side -->
-                <div class="w-full md:w-5/12 relative bg-zinc-100 border-r border-zinc-100">
+                <div class="w-full md:w-5/12 h-64 md:h-auto relative bg-zinc-100 border-b md:border-b-0 md:border-r border-zinc-100">
                     <div id="restaurant-map" class="h-full w-full" wire:ignore></div>
                 </div>
 
                 <!-- Form Side -->
-                <div class="w-full md:w-7/12 p-12 overflow-y-auto bg-white">
+                <div class="w-full md:w-7/12 p-6 md:p-12 overflow-y-auto bg-white">
                     <div class="flex justify-between items-center mb-10">
                         <div>
-                            <h2 class="text-3xl font-black text-[#1D1D1B] tracking-tight">Open Your Kitchen</h2>
-                            <p class="text-zinc-500 mt-1">Lengkapi data untuk mendaftarkan bisnis Anda.</p>
+                            <h2 class="text-2xl md:text-3xl font-black text-[#1D1D1B] tracking-tight">Open Your Kitchen</h2>
+                            <p class="text-xs md:text-sm text-zinc-500 mt-1">Lengkapi data untuk mendaftarkan bisnis Anda.</p>
                         </div>
                         <button wire:click="$set('showRestaurantModal', false)" class="p-2 rounded-xl hover:bg-zinc-100 transition-colors">
                             <svg class="w-8 h-8 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

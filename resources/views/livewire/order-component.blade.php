@@ -149,6 +149,10 @@
                                 <span>Biaya Antar</span>
                                 <span class="font-bold text-[#1D1D1B]">@currency($deliveryFee)</span>
                             </div>
+                            <div class="flex justify-between text-sm text-[#6F5F51]">
+                                <span>Biaya Layanan</span>
+                                <span class="font-bold text-[#1D1D1B]">@currency($serviceCharge)</span>
+                            </div>
                             <div class="pt-4 border-t border-[#F0DECB] flex justify-between">
                                 <span class="font-bold text-[#1D1D1B]">Total</span>
                                 <span class="text-2xl font-bold text-[#B25C18]">@currency($total)</span>

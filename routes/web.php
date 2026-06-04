@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
   
     Route::get('/explore', [ExploreController::class, 'index']) ->name('explore');
     Route::get('/random', [ExploreController::class, 'random'])->name('explore.random');
+    Route::post('/chatbot', [\App\Http\Controllers\ChatbotController::class, 'handle'])->name('chatbot.handle');
 
     Route::get('/profile', \App\Livewire\Pages\User\Profile::class)->name('profile.user');
     Route::get('/restaurant/{restaurant}/manage', \App\Livewire\ManageRestaurant::class)->name('restaurant.manage');

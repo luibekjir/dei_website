@@ -168,7 +168,7 @@
                                         <p class="text-lg font-bold text-[#B25C18]">@currency($menu->price)</p>
                                     </div>
 
-                                    <h3 class="text-2xl font-bold text-[#1D1D1B] leading-tight group-hover:text-[#B25C18] transition-colors">
+                                    <h3 class="text-2xl font-bold text-[#1D1D1B] leading-tight group-hover:text-[#B25C18] transition-colors line-clamp-1">
                                         {{ $menu->name }}
                                     </h3>
 

@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
         $province = Province::where('name', 'Jawa Timur')->first();
         $city = City::where('name', 'Surabaya')->first();
 
+        // Create 1 demo user
         User::updateOrCreate(
             ['email' => 'user@example.com'],
             [
@@ -26,5 +27,19 @@ class UserSeeder extends Seeder
                 'profile_completed' => true,
             ]
         );
+
+        // Create 10 fake users
+        $faker = \Faker\Factory::create('id_ID');
+        for ($i = 0; $i < 10; $i++) {
+            User::create([
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'province_id' => $province?->id,
+                'city_id' => $city?->id,
+                'profile_completed' => true,
+            ]);
+        }
     }
 }

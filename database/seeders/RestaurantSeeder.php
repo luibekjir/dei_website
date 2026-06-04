@@ -10,131 +10,30 @@ class RestaurantSeeder extends Seeder
 {
     public function run(): void
     {
-        $restaurants = [
-            [
-                'name' => 'Mizumi Atelier',
-                'category_id' => Category::where('name', 'Japanese')->first()->id,
-                'description' => 'Elegant Japanese dining with curated omakase experience.',
-                'image' => null,
-                'address' => 'GWalk Citraland, Surabaya',
-                'rating' => 4.9,
-                'latitude' => -7.2843,
-                'longitude' => 112.6433,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance', 'Wheelchair accessible seating'],
-                    'Amenities' => ['Wifi', 'AC', 'Toilet', 'Outdoor seating'],
-                    'Parking' => ['Free street parking', 'Paid parking lot']
-                ]
-            ],
-            [
-                'name' => 'Pasta & Petals',
-                'category_id' => Category::where('name', 'Italian')->first()->id,
-                'description' => 'Fresh handmade pasta with floral-inspired plating.',
-                'image' => null,
-                'address' => 'Citraland, Surabaya',
-                'rating' => 4.7,
-                'latitude' => -7.2855,
-                'longitude' => 112.6420,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance'],
-                    'Amenities' => ['AC', 'Toilet', 'Indoor seating'],
-                    'Parking' => ['Free parking lot']
-                ]
-            ],
-            [
-                'name' => 'Flora Kitchen',
-                'category_id' => Category::where('name', 'Vegan')->first()->id,
-                'description' => 'Plant-based dining with premium seasonal ingredients.',
-                'image' => null,
-                'address' => 'UC Town, Citraland, Surabaya',
-                'rating' => 4.8,
-                'latitude' => -7.2862,
-                'longitude' => 112.6415,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance', 'Wheelchair accessible toilet'],
-                    'Amenities' => ['Wifi', 'AC', 'Toilet', 'Outdoor seating'],
-                    'Parking' => ['Free parking lot']
-                ]
-            ],
-            [
-                'name' => 'Citra Bakery',
-                'category_id' => Category::where('name', 'Bakery')->first()->id,
-                'description' => 'Famous for their fresh breads and traditional Indonesian snacks.',
-                'image' => null,
-                'address' => 'Fresh Market Citraland, Surabaya',
-                'rating' => 4.6,
-                'latitude' => -7.2891,
-                'longitude' => 112.6468,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance'],
-                    'Amenities' => ['Toilet', 'Indoor seating'],
-                    'Parking' => ['Free street parking']
-                ]
-            ],
-            [
-                'name' => 'Bistro de Citra',
-                'category_id' => Category::where('name', 'French')->first()->id,
-                'description' => 'Charming neighborhood spot serving classic French comfort food.',
-                'image' => null,
-                'address' => 'Bukit Telaga Golf, Citraland, Surabaya',
-                'rating' => 4.5,
-                'latitude' => -7.2950,
-                'longitude' => 112.6350,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance'],
-                    'Amenities' => ['AC', 'Toilet', 'Outdoor seating'],
-                    'Parking' => ['Paid parking lot']
-                ]
-            ],
-            [
-                'name' => 'Sushi Zen Surabaya',
-                'category_id' => Category::where('name', 'Japanese')->first()->id,
-                'description' => 'Minimalist decor with a focus on high-quality seasonal fish.',
-                'image' => null,
-                'address' => 'International Village, Surabaya',
-                'rating' => 4.8,
-                'latitude' => -7.2800,
-                'longitude' => 112.6450,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance', 'Wheelchair accessible seating'],
-                    'Amenities' => ['Wifi', 'AC', 'Toilet'],
-                    'Parking' => ['Free parking lot']
-                ]
-            ],
-            [
-                'name' => 'Toscana Grill Citraland',
-                'category_id' => Category::where('name', 'Italian')->first()->id,
-                'description' => 'Hearty Tuscan dishes and a great selection of regional wines.',
-                'image' => null,
-                'address' => 'Ruko North Junction, Surabaya',
-                'rating' => 4.4,
-                'latitude' => -7.2780,
-                'longitude' => 112.6400,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance'],
-                    'Amenities' => ['Wifi', 'AC', 'Toilet', 'Outdoor seating'],
-                    'Parking' => ['Paid parking lot']
-                ]
-            ],
-            [
-                'name' => 'Green Leaf Surabaya',
-                'category_id' => Category::where('name', 'Vegan')->first()->id,
-                'description' => 'Eco-friendly cafe with organic salads and fresh cold-pressed juices.',
-                'image' => null,
-                'address' => 'North West Lake, Surabaya',
-                'rating' => 4.3,
-                'latitude' => -7.2750,
-                'longitude' => 112.6350,
-                'facilities' => [
-                    'Accessibility' => ['Wheelchair accessible entrance'],
-                    'Amenities' => ['Wifi', 'AC', 'Toilet'],
-                    'Parking' => ['Free street parking']
-                ]
-            ],
-        ];
+        $faker = \Faker\Factory::create('id_ID');
+        $categories = Category::all();
+        
+        if ($categories->isEmpty()) {
+            return;
+        }
 
-        foreach ($restaurants as $restaurant) {
-            Restaurant::updateOrCreate(['name' => $restaurant['name']], $restaurant);
+        for ($i = 0; $i < 20; $i++) {
+            Restaurant::create([
+                'name' => $faker->company . ' Restaurant',
+                'category_id' => $categories->random()->id,
+                'description' => $faker->sentence(10),
+                'image' => null,
+                'address' => $faker->address,
+                'rating' => $faker->randomFloat(1, 3, 5),
+                'latitude' => $faker->latitude(-7.3, -7.2), // Surabaya lat range
+                'longitude' => $faker->longitude(112.6, 112.8), // Surabaya long range
+                'facilities' => [
+                    'Accessibility' => $faker->randomElements(['Wheelchair accessible entrance', 'Wheelchair accessible seating'], $faker->numberBetween(1, 2)),
+                    'Amenities' => $faker->randomElements(['Wifi', 'AC', 'Toilet', 'Outdoor seating', 'Indoor seating'], $faker->numberBetween(2, 4)),
+                    'Parking' => $faker->randomElements(['Free street parking', 'Paid parking lot', 'Free parking lot'], 1)
+                ],
+                'user_id' => null,
+            ]);
         }
     }
 }

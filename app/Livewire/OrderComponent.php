@@ -11,6 +11,7 @@ class OrderComponent extends Component
     public $subtotal = 0;
     public $taxes = 0;
     public $deliveryFee = 0;
+    public $serviceCharge = 2000;
     public $negotiatedDeliveryFee = 0;
     public $negotiationMessage;
     public $negotiationStatus = 'none';
@@ -65,6 +66,16 @@ class OrderComponent extends Component
 
     public function negotiateDeliveryFee()
     {
+        if ($this->negotiatedDeliveryFee < 1000) {
+            $this->dispatch('notify', ['message' => 'Oops, tawaran ongkir kamu terlalu rendah (minimal Rp 1.000).', 'type' => 'error']);
+            return;
+        }
+
+        if ($this->negotiatedDeliveryFee >= $this->deliveryFee) {
+            $this->dispatch('notify', ['message' => 'Tawaran harus lebih rendah dari tarif pengiriman saat ini.', 'type' => 'error']);
+            return;
+        }
+
         if ($this->negotiatedDeliveryFee <= 0 || $this->negotiatedDeliveryFee === $this->deliveryFee) {
             return;
         }
@@ -89,7 +100,11 @@ class OrderComponent extends Component
 
     public function adjustNegotiatedFee($delta)
     {
-        $this->negotiatedDeliveryFee = max(1000, $this->negotiatedDeliveryFee + $delta);
+        $newFee = $this->negotiatedDeliveryFee + $delta;
+        $newFee = max(1000, $newFee);
+        $newFee = min($this->deliveryFee - 1000, $newFee); // Must be strictly less than delivery fee
+        
+        $this->negotiatedDeliveryFee = max(1000, $newFee);
     }
 
     public function simulateDriverResponse()
@@ -228,6 +243,7 @@ class OrderComponent extends Component
             'subtotal' => $this->subtotal,
             'taxes' => $this->taxes,
             'delivery_fee' => $this->deliveryFee,
+            'service_charge' => $this->serviceCharge,
             'total' => $this->total,
             'status' => $this->paymentStatus === 'success' ? 'confirmed' : 'pending',
             'type' => $this->orderType,
@@ -266,7 +282,7 @@ class OrderComponent extends Component
             }
         }
 
-        $this->total = $this->subtotal + $this->taxes + $this->deliveryFee;
+        $this->total = $this->subtotal + $this->taxes + $this->deliveryFee + $this->serviceCharge;
     }
 
     public function render()
