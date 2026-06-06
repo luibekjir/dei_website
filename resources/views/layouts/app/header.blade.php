@@ -100,6 +100,7 @@
 
     @livewire('chat-component')
     @livewire('review-component')
+    @include('components.chatbot')
     @fluxScripts
 </body>
 

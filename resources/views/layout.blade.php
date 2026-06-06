@@ -63,68 +63,31 @@
                 </div>
 
                 <div class="mt-10 grid gap-6 md:grid-cols-3">
-                    {{-- Card 1 --}}
+                    @foreach($curatedMenus as $menu)
                     <article class="flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm transition hover:shadow-md">
                         <div class="relative h-60 w-full overflow-hidden">
-                            <img src="{{ asset('images/makanan3.png') }}" alt="Saigon Street Eats" class="absolute inset-0 h-full w-full object-cover">
+                            @if($menu->image)
+                                <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="absolute inset-0 h-full w-full object-cover">
+                            @else
+                                <div class="absolute inset-0 h-full w-full bg-[#f8ebd8] flex items-center justify-center text-[#955215] font-bold text-4xl">{{ $menu->name[0] }}</div>
+                            @endif
                             <div class="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-sm font-bold shadow-sm backdrop-blur-md">
-                                <span class="text-[#d97706]">★</span> 4.9
+                                <span class="text-[#d97706]">★</span> {{ number_format($menu->rating, 1) }}
                             </div>
                         </div>
                         <div class="flex flex-1 flex-col p-6">
                             <div class="flex items-start justify-between gap-4">
-                                <h3 class="text-xl font-bold text-[#1f1a17]">Saigon Street Eats</h3>
-                                <span class="shrink-0 text-base font-black text-[#955215]">Rp 7.50</span>
+                                <h3 class="text-xl font-bold text-[#1f1a17] line-clamp-1">{{ $menu->name }}</h3>
+                                <span class="shrink-0 text-base font-black text-[#955215]">@currency($menu->price)</span>
                             </div>
-                            <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51]">Authentic family recipes passed down through generations. Known for the...</p>
+                            <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51] line-clamp-2">{{ $menu->description ?: $menu->restaurant->description }}</p>
                             <div class="mt-6 flex flex-wrap gap-2">
-                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">Vietnamese</span>
-                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">Budget friendly</span>
+                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42] truncate max-w-full">{{ $menu->restaurant->name }}</span>
+                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">{{ $menu->restaurant->category->name ?? 'Culinary' }}</span>
                             </div>
                         </div>
                     </article>
-
-                    {{-- Card 2 --}}
-                    <article class="flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm transition hover:shadow-md">
-                        <div class="relative h-60 w-full overflow-hidden">
-                            <img src="{{ asset('images/makanan4.png') }}" alt="Abyssinia House" class="absolute inset-0 h-full w-full object-cover">
-                            <div class="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-sm font-bold shadow-sm backdrop-blur-md">
-                                <span class="text-[#d97706]">★</span> 4.8
-                            </div>
-                        </div>
-                        <div class="flex flex-1 flex-col p-6">
-                            <div class="flex items-start justify-between gap-4">
-                                <h3 class="text-xl font-bold text-[#1f1a17]">Abyssinia House</h3>
-                                <span class="shrink-0 text-base font-black text-[#955215]">Rp 12.00</span>
-                            </div>
-                            <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51]">A communal dining experience featuring hand-stretched injera and spice-infused...</p>
-                            <div class="mt-6 flex flex-wrap gap-2">
-                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">Ethiopian</span>
-                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">Vegetarian</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    {{-- Card 3 --}}
-                    <article class="flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm transition hover:shadow-md">
-                        <div class="relative h-60 w-full overflow-hidden">
-                            <img src="{{ asset('images/makanan5.png') }}" alt="Patagonia Pantry" class="absolute inset-0 h-full w-full object-cover">
-                            <div class="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-sm font-bold shadow-sm backdrop-blur-md">
-                                <span class="text-[#d97706]">★</span> 4.7
-                            </div>
-                        </div>
-                        <div class="flex flex-1 flex-col p-6">
-                            <div class="flex items-start justify-between gap-4">
-                                <h3 class="text-xl font-bold text-[#1f1a17]">Patagonia Pantry</h3>
-                                <span class="shrink-0 text-base font-black text-[#955215]">Rp 4.00</span>
-                            </div>
-                            <p class="mt-3 flex-1 text-sm leading-6 text-[#6a5b51]">The best flaky empanadas in town. Perfect for a quick bite or a full meal on...</p>
-                            <div class="mt-6 flex flex-wrap gap-2">
-                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">Argentinian</span>
-                                <span class="rounded-full bg-[#f2e9dc] px-4 py-1.5 text-[11px] font-bold text-[#7a5e42]">Street food</span>
-                            </div>
-                        </div>
-                    </article>
+                    @endforeach
                 </div>
             </section>
 
@@ -161,61 +124,26 @@
         <section class="mx-auto max-w-7xl px-6 py-20">
             <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]">Trending Tastes</h2>
             <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {{-- Item 1 --}}
+                @foreach($trendingMenus as $index => $menu)
                 <article class="group cursor-pointer">
-                    <div class="relative h-48 w-full overflow-hidden rounded-2xl bg-gray-200">
-                        <img src="{{ asset('images/makanan1.png') }}" alt="Giant Indian Thali" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                    <div class="relative h-48 w-full overflow-hidden rounded-2xl bg-[#f8ebd8]">
+                        @if($menu->image)
+                            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                        @else
+                            <div class="h-full w-full flex items-center justify-center text-[#955215] font-bold text-4xl transition duration-300 group-hover:scale-105">{{ $menu->name[0] }}</div>
+                        @endif
                     </div>
                     <div class="mt-4 flex items-start justify-between gap-2">
                         <div>
-                            <h3 class="text-base font-bold text-[#1f1a17]">Giant Indian Thali</h3>
-                            <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Top Seller</span>
+                            <h3 class="text-base font-bold text-[#1f1a17] line-clamp-1">{{ $menu->name }}</h3>
+                            <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">
+                                {{ $index == 0 ? 'Top Seller' : ($index == 1 ? 'Must Try' : 'Popular') }}
+                            </span>
                         </div>
-                        <span class="text-sm font-bold text-[#955215]">Rp 9.99</span>
+                        <span class="text-sm font-bold text-[#955215]">@currency($menu->price)</span>
                     </div>
                 </article>
-
-                {{-- Item 2 --}}
-                <article class="group cursor-pointer">
-                    <div class="relative h-48 w-full overflow-hidden rounded-2xl bg-gray-200">
-                        <img src="{{ asset('images/makanan2.png') }}" alt="Crispy Soy-Garlic Chicken" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="mt-4 flex items-start justify-between gap-2">
-                        <div>
-                            <h3 class="text-base font-bold text-[#1f1a17]">Crispy Soy-Garlic...</h3>
-                            <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Must Try</span>
-                        </div>
-                        <span class="text-sm font-bold text-[#955215]">Rp 11.50</span>
-                    </div>
-                </article>
-
-                {{-- Item 3 --}}
-                <article class="group cursor-pointer">
-                    <div class="relative h-48 w-full overflow-hidden rounded-2xl bg-gray-200">
-                        <img src="{{ asset('images/makanan3.png') }}" alt="Miso Tonkotsu Ramen" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="mt-4 flex items-start justify-between gap-2">
-                        <div>
-                            <h3 class="text-base font-bold text-[#1f1a17]">Miso Tonkotsu Ramen</h3>
-                            <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Popular</span>
-                        </div>
-                        <span class="text-sm font-bold text-[#955215]">Rp 13.00</span>
-                    </div>
-                </article>
-
-                {{-- Item 4 --}}
-                <article class="group cursor-pointer">
-                    <div class="relative h-48 w-full overflow-hidden rounded-2xl bg-gray-200">
-                        <img src="{{ asset('images/makanan4.png') }}" alt="Classic Ahi Poke Bowl" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="mt-4 flex items-start justify-between gap-2">
-                        <div>
-                            <h3 class="text-base font-bold text-[#1f1a17]">Classic Ahi Poke Bowl</h3>
-                            <span class="mt-1 inline-block rounded-full bg-[#f2e9dc] px-3 py-1 text-[10px] font-bold text-[#7a5e42]">Fresh</span>
-                        </div>
-                        <span class="text-sm font-bold text-[#955215]">Rp 12.50</span>
-                    </div>
-                </article>
+                @endforeach
             </div>
         </section>
 
@@ -223,45 +151,64 @@
         <section class="mx-auto max-w-7xl px-6 pb-20">
             <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]">Hidden Gems</h2>
             <div class="mt-10 grid grid-cols-1 gap-4 md:grid-cols-4 md:grid-rows-2">
-                
-                {{-- Kiri Besar (Col-span-2, Row-span-2) --}}
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 min-h-[400px]">
-                    <img src="{{ asset('images/makanan5.png') }}" alt="Artisan Hearth Bakery" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                @if(isset($hiddenGems[0]))
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 min-h-[400px] bg-[#f8ebd8]">
+                    @if($hiddenGems[0]->image)
+                        <img src="{{ asset('storage/' . $hiddenGems[0]->image) }}" alt="{{ $hiddenGems[0]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                    @else
+                        <div class="absolute inset-0 h-full w-full flex items-center justify-center text-[#955215] font-bold text-6xl">{{ $hiddenGems[0]->name[0] }}</div>
+                    @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-8 text-white">
-                        <p class="text-xs font-bold uppercase tracking-widest text-[#f5c48a]">Back-alley find</p>
-                        <h3 class="mt-2 text-3xl font-black">Artisan Hearth Bakery</h3>
-                        <p class="mt-2 text-sm text-white/80">Famous for sourdough loaves that cost less than a coffee.</p>
+                    <div class="absolute bottom-0 left-0 p-8 text-white z-10">
+                        <p class="text-xs font-bold uppercase tracking-widest text-[#f5c48a]">⭐ {{ number_format($hiddenGems[0]->rating, 1) }} - Back-alley find</p>
+                        <h3 class="mt-2 text-3xl font-black">{{ $hiddenGems[0]->name }}</h3>
+                        <p class="mt-2 text-sm text-white/80 line-clamp-2">{{ $hiddenGems[0]->description }}</p>
                     </div>
                 </article>
+                @endif
 
-                {{-- Kanan Atas Lebar (Col-span-2, Row-span-1) --}}
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 min-h-[200px]">
-                    <img src="{{ asset('images/makanan1.png') }}" alt="Mumbai Express" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                @if(isset($hiddenGems[1]))
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 min-h-[200px] bg-[#f8ebd8]">
+                    @if($hiddenGems[1]->image)
+                        <img src="{{ asset('storage/' . $hiddenGems[1]->image) }}" alt="{{ $hiddenGems[1]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                    @else
+                        <div class="absolute inset-0 h-full w-full flex items-center justify-center text-[#955215] font-bold text-4xl">{{ $hiddenGems[1]->name[0] }}</div>
+                    @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-6 text-white">
-                        <h3 class="text-xl font-bold">Mumbai Express</h3>
-                        <p class="mt-1 text-sm text-white/80">Best samosas in the tri-state area.</p>
+                    <div class="absolute bottom-0 left-0 p-6 text-white z-10">
+                        <h3 class="text-xl font-bold">{{ $hiddenGems[1]->name }}</h3>
+                        <p class="mt-1 text-sm text-white/80 line-clamp-1">⭐ {{ number_format($hiddenGems[1]->rating, 1) }}</p>
                     </div>
                 </article>
+                @endif
 
-                {{-- Kanan Bawah Kiri (Col-span-1, Row-span-1) --}}
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px]">
-                    <img src="{{ asset('images/makanan2.png') }}" alt="Classic Diner" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                @if(isset($hiddenGems[2]))
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px] bg-[#f8ebd8]">
+                    @if($hiddenGems[2]->image)
+                        <img src="{{ asset('storage/' . $hiddenGems[2]->image) }}" alt="{{ $hiddenGems[2]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                    @else
+                        <div class="absolute inset-0 h-full w-full flex items-center justify-center text-[#955215] font-bold text-3xl">{{ $hiddenGems[2]->name[0] }}</div>
+                    @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-5 text-white">
-                        <h3 class="text-lg font-bold">Classic Diner</h3>
+                    <div class="absolute bottom-0 left-0 p-5 text-white z-10">
+                        <h3 class="text-lg font-bold">{{ $hiddenGems[2]->name }}</h3>
                     </div>
                 </article>
+                @endif
 
-                {{-- Kanan Bawah Kanan (Col-span-1, Row-span-1) --}}
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px]">
-                    <img src="{{ asset('images/makanan3.png') }}" alt="Glaze Lab" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                @if(isset($hiddenGems[3]))
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px] bg-[#f8ebd8]">
+                    @if($hiddenGems[3]->image)
+                        <img src="{{ asset('storage/' . $hiddenGems[3]->image) }}" alt="{{ $hiddenGems[3]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                    @else
+                        <div class="absolute inset-0 h-full w-full flex items-center justify-center text-[#955215] font-bold text-3xl">{{ $hiddenGems[3]->name[0] }}</div>
+                    @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-5 text-white">
-                        <h3 class="text-lg font-bold">Glaze Lab</h3>
+                    <div class="absolute bottom-0 left-0 p-5 text-white z-10">
+                        <h3 class="text-lg font-bold">{{ $hiddenGems[3]->name }}</h3>
                     </div>
                 </article>
+                @endif
             </div>
         </section>
 
@@ -326,7 +273,4 @@
             </div>
         </footer>
         
-        <!-- AI Chatbot Component -->
-        @include('components.chatbot')
-    </div>
 </x-layouts::app>

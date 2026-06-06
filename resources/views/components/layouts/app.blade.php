@@ -42,5 +42,7 @@
         <span x-text="type === 'success' ? '✅' : '❌'"></span>
         <span x-text="message"></span>
     </div>
+    <!-- AI Chatbot Component -->
+    @include('components.chatbot')
 </body>
 </html>
