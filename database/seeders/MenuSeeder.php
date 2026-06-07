@@ -18,14 +18,12 @@ class MenuSeeder extends Seeder
         }
 
         $realMenus = [
-            'Sate Ayam Madura', 'Sate Kambing', 'Nasi Goreng Spesial', 'Mie Goreng Seafood',
-            'Rendang Daging', 'Ayam Bakar Taliwang', 'Soto Ayam Lamongan', 'Soto Betawi',
-            'Gado-Gado Boplo', 'Ketoprak Jakarta', 'Nasi Uduk Ayam Goreng', 'Nasi Padang Komplit',
-            'Bakso Urat Spesial', 'Mie Ayam Jamur', 'Ayam Penyet Sambal Ijo', 'Ikan Bakar Gurame',
-            'Cumi Saus Padang', 'Udang Asam Manis', 'Sayur Asem', 'Sop Iga Sapi',
-            'Pempek Kapal Selam', 'Tekwan Palembang', 'Rawon Daging Sapi', 'Tongseng Kambing',
-            'Nasi Liwet Solo', 'Gudeg Komplit', 'Sate Lilit Bali', 'Ayam Betutu',
-            'Es Teh Manis', 'Es Jeruk Nipis', 'Es Campur', 'Es Cendol Dawet'
+            'Sate Ayam Madura' => 'sate.png',
+            'Nasi Goreng Spesial' => 'nasigoreng.png',
+            'Soto Ayam Lamongan' => 'soto.png',
+            'Es Teh Manis' => 'esteh.png',
+            'Bakso Urat Spesial' => 'bakso.png',
+            'Ayam Bakar Taliwang' => 'ayambakar.png'
         ];
 
         foreach ($restaurants as $restaurant) {
@@ -35,24 +33,24 @@ class MenuSeeder extends Seeder
                 'name' => 'Main Menu'
             ]);
 
-            // Generate 8-12 menus items per restaurant
-            $menuCount = rand(8, 12);
+            // Generate 4-6 menus items per restaurant
+            $menuCount = rand(4, 6);
             
             // Pilih beberapa menu secara acak dari array $realMenus
-            $selectedMenus = $faker->randomElements($realMenus, $menuCount);
+            $selectedMenuNames = $faker->randomElements(array_keys($realMenus), $menuCount);
 
-            foreach ($selectedMenus as $menuName) {
+            foreach ($selectedMenuNames as $menuName) {
                 \App\Models\MenuItem::create([
                     'restaurant_id' => $restaurant->id,
                     'menu_id' => $menu->id,
                     'name' => $menuName,
                     'description' => $faker->sentence(6),
-                    'price' => $faker->randomElement([15, 20, 25, 30, 45, 50, 60, 75, 85, 100]) * 1000,
-                    'rating' => $faker->randomFloat(1, 3.8, 4.9),
-                    'image' => 'menus/food' . rand(1, 5) . '.jpg',
+                    'price' => $faker->randomElement([15, 20, 25, 30, 45, 50, 60]) * 1000,
+                    'rating' => $faker->randomFloat(1, 4.0, 4.9),
+                    'image' => $realMenus[$menuName],
                     'available' => true,
                     'spice_level' => $faker->numberBetween(0, 5),
-                    'is_halal' => $faker->boolean(90),
+                    'is_halal' => true,
                 ]);
             }
         }

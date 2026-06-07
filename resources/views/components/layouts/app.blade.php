@@ -1,13 +1,14 @@
 <!-- resources/views/components/layouts/app.blade.php -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Culinary Atelier' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
-<body class="bg-[#FEF6ED] text-[#1A1A1A]">
+<body class="bg-[#FEF6ED] text-[#1A1A1A] overflow-x-hidden w-full">
     {{ $slot }}
     <!-- DEBUG: CHAT COMPONENT SHOULD BE BELOW -->
     @livewire('chat-component')
@@ -44,5 +45,15 @@
     </div>
     <!-- AI Chatbot Component -->
     @include('components.chatbot')
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('livewire:navigated', () => {
+            AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
+        });
+    </script>
 </body>
 </html>

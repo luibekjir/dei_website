@@ -6,7 +6,7 @@
         {{-- HERO SECTION --}}
         <section class="mx-auto max-w-7xl px-6 py-10 lg:py-16">
             <div class="grid items-center gap-12 lg:grid-cols-2">
-                <div class="pr-8">
+                <div class="pr-8" data-aos="fade-right">
                     <h1 class="max-w-xl text-5xl font-black leading-[1.05] tracking-tight sm:text-[4rem]">
                         Find <span class="text-[#955215] italic">Affordable</span><br>
                         Food Near You
@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <div class="relative flex items-center justify-center gap-4 sm:gap-6 lg:justify-end overflow-x-hidden py-8 lg:py-0">
+                <div class="relative flex items-center justify-center gap-4 sm:gap-6 lg:justify-end overflow-x-hidden py-8 lg:py-0" data-aos="fade-left" data-aos-delay="200">
                     <div class="z-10 h-[280px] w-[200px] shrink-0 overflow-hidden rounded-[2rem] shadow-xl sm:h-[380px] sm:w-[280px]">
                         <img src="{{ asset('images/makanan1.png') }}" alt="Hero Image 1" class="h-full w-full object-cover">
                     </div>
@@ -50,7 +50,7 @@
             
             {{-- CURATED RECOMMENDATIONS --}}
             <section class="mx-auto max-w-7xl px-6">
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-up">
                     <div>
                         <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]">Curated Recommendations</h2>
                         <p class="mt-2 max-w-xl text-sm leading-6 text-[#6a5b51]">
@@ -64,7 +64,7 @@
 
                 <div class="mt-10 grid gap-6 md:grid-cols-3">
                     @foreach($curatedMenus as $menu)
-                    <article class="flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm transition hover:shadow-md">
+                    <article class="flex flex-col overflow-hidden rounded-[2rem] bg-white shadow-sm transition hover:shadow-md" data-aos="fade-up" data-aos-delay="{{ $loop->index * 150 }}">
                         <div class="relative h-60 w-full overflow-hidden">
                             @if($menu->image)
                                 <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="absolute inset-0 h-full w-full object-cover">
@@ -93,23 +93,23 @@
 
             {{-- THE SIMPLE PATH TO FLAVOR --}}
             <section class="mx-auto mt-24 max-w-7xl px-6 text-center">
-                <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]">The Simple Path to Flavor</h2>
+                <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]" data-aos="fade-up">The Simple Path to Flavor</h2>
                 <div class="mt-14 grid gap-10 md:grid-cols-3">
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
                         <div class="flex h-20 w-20 items-center justify-center rounded-full bg-[#f8ebd8] text-2xl text-[#955215]">
                             <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
                         <h3 class="mt-6 text-lg font-bold text-[#1f1a17]">Find</h3>
                         <p class="mt-2 text-sm leading-6 text-[#6a5b51]">Search by location to see what is cooking nearby in your neighborhood.</p>
                     </div>
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
                         <div class="flex h-20 w-20 items-center justify-center rounded-full bg-[#f8ebd8] text-2xl text-[#955215]">
                             <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                         </div>
                         <h3 class="mt-6 text-lg font-bold text-[#1f1a17]">Filter</h3>
                         <p class="mt-2 text-sm leading-6 text-[#6a5b51]">Adjust your budget and cuisine preferences to find the perfect match.</p>
                     </div>
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="300">
                         <div class="flex h-20 w-20 items-center justify-center rounded-full bg-[#f8ebd8] text-2xl text-[#955215]">
                             <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
@@ -122,10 +122,10 @@
 
         {{-- TRENDING TASTES --}}
         <section class="mx-auto max-w-7xl px-6 py-20">
-            <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]">Trending Tastes</h2>
+            <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]" data-aos="fade-right">Trending Tastes</h2>
             <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach($trendingMenus as $index => $menu)
-                <article class="group cursor-pointer">
+                <article class="group cursor-pointer" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="relative h-48 w-full overflow-hidden rounded-2xl bg-[#f8ebd8]">
                         @if($menu->image)
                             <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
@@ -149,10 +149,10 @@
 
         {{-- HIDDEN GEMS (GRID LAYOUT) --}}
         <section class="mx-auto max-w-7xl px-6 pb-20">
-            <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]">Hidden Gems</h2>
+            <h2 class="text-3xl font-black tracking-tight text-[#1f1a17]" data-aos="fade-down">Hidden Gems</h2>
             <div class="mt-10 grid grid-cols-1 gap-4 md:grid-cols-4 md:grid-rows-2">
                 @if(isset($hiddenGems[0]))
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 min-h-[400px] bg-[#f8ebd8]">
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 min-h-[400px] bg-[#f8ebd8]" data-aos="fade-right">
                     @if($hiddenGems[0]->image)
                         <img src="{{ asset('storage/' . $hiddenGems[0]->image) }}" alt="{{ $hiddenGems[0]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
                     @else
@@ -168,7 +168,7 @@
                 @endif
 
                 @if(isset($hiddenGems[1]))
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 min-h-[200px] bg-[#f8ebd8]">
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-2 min-h-[200px] bg-[#f8ebd8]" data-aos="fade-left" data-aos-delay="100">
                     @if($hiddenGems[1]->image)
                         <img src="{{ asset('storage/' . $hiddenGems[1]->image) }}" alt="{{ $hiddenGems[1]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
                     @else
@@ -183,7 +183,7 @@
                 @endif
 
                 @if(isset($hiddenGems[2]))
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px] bg-[#f8ebd8]">
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px] bg-[#f8ebd8]" data-aos="fade-up" data-aos-delay="200">
                     @if($hiddenGems[2]->image)
                         <img src="{{ asset('storage/' . $hiddenGems[2]->image) }}" alt="{{ $hiddenGems[2]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
                     @else
@@ -197,7 +197,7 @@
                 @endif
 
                 @if(isset($hiddenGems[3]))
-                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px] bg-[#f8ebd8]">
+                <article class="group relative overflow-hidden rounded-3xl md:col-span-1 min-h-[200px] bg-[#f8ebd8]" data-aos="fade-up" data-aos-delay="300">
                     @if($hiddenGems[3]->image)
                         <img src="{{ asset('storage/' . $hiddenGems[3]->image) }}" alt="{{ $hiddenGems[3]->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
                     @else
@@ -214,7 +214,7 @@
 
         {{-- CALL TO ACTION --}}
         <section class="px-6 py-10 pb-24">
-            <div class="mx-auto flex max-w-5xl flex-col items-center rounded-[2.5rem] bg-gradient-to-br from-[#cc6f22] to-[#e48b37] px-8 py-16 text-center shadow-lg sm:px-16">
+            <div class="mx-auto flex max-w-5xl flex-col items-center rounded-[2.5rem] bg-gradient-to-br from-[#cc6f22] to-[#e48b37] px-8 py-16 text-center shadow-lg sm:px-16" data-aos="zoom-in" data-aos-offset="100">
                 <h2 class="text-3xl font-black tracking-tight text-white sm:text-4xl">Ready to Taste Your Next Adventure?</h2>
                 <p class="mt-4 max-w-2xl text-base text-white/90">Join 50,000+ travelers and migrants exploring the best local eats every day.</p>
                 <div class="mt-8 flex flex-col gap-4 sm:flex-row">

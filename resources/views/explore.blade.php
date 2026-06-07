@@ -2,20 +2,20 @@
     <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A] py-12">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             
-            <header class="text-center space-y-4 mb-16">
+            <header class="text-center space-y-4 mb-16" data-aos="fade-down">
                 <p class="text-[10px] uppercase tracking-[0.4em] text-[#AB7B45] font-bold">Curated Heritage • Modern Flavors</p>
                 <h1 class="text-5xl font-bold tracking-tight text-[#1D1D1B] sm:text-7xl">Explore Indonesian <br/><span class="text-[#B25C18]">Regional Delicacies</span></h1>
                 <p class="max-w-2xl mx-auto text-lg text-[#6F5F51] mt-6">From the spicy Rendang of Sumatra to the rich Rawon of East Java, discover the soul of Indonesia through its culinary masterpieces.</p>
             </header>
 
             <!-- Map View -->
-            <section class="mb-16 rounded-[2.5rem] overflow-hidden border border-[#F0DECB] shadow-sm bg-white">
+            <section class="mb-16 rounded-[2.5rem] overflow-hidden border border-[#F0DECB] shadow-sm bg-white" data-aos="zoom-in" data-aos-delay="200">
                 <div id="map" class="h-[300px] md:h-[400px] w-full z-0"></div>
             </section>
 
             @if(auth()->check() && $recommendations->count() > 0)
             <section class="mb-16">
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-8" data-aos="fade-right">
                     <div>
                         <h2 class="text-3xl font-bold text-[#1D1D1B]">Heritage for You</h2>
                         <p class="text-sm text-[#6F5F51] mt-1">Based on your hometown culinary origin</p>
@@ -26,7 +26,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach($recommendations as $menu)
-                    <a href="{{ route('restaurant.show', [$menu->restaurant_id, 'highlight' => $menu->id]) }}" class="group relative overflow-hidden rounded-[2rem] bg-white border border-[#F0DECB] shadow-sm hover:shadow-xl transition-all duration-500">
+                    <a href="{{ route('restaurant.show', [$menu->restaurant_id, 'highlight' => $menu->id]) }}" class="group relative overflow-hidden rounded-[2rem] bg-white border border-[#F0DECB] shadow-sm hover:shadow-xl transition-all duration-500" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="h-48 overflow-hidden relative">
                             @if($menu->image)
                                 <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -72,6 +72,7 @@
                 <aside 
                     :class="mobileFiltersOpen ? 'block' : 'hidden lg:block'"
                     class="w-full lg:w-[300px] shrink-0 space-y-10"
+                    data-aos="fade-right"
                 >
                     <section>
                         <h2 class="text-sm font-bold uppercase tracking-widest text-[#AB7B45] mb-6">Filter by Region</h2>
@@ -142,7 +143,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         @forelse($menus as $menu)
-                        <a href="{{ route('restaurant.show', [$menu->restaurant->id, 'highlight' => $menu->id]) }}" class="group">
+                        <a href="{{ route('restaurant.show', [$menu->restaurant->id, 'highlight' => $menu->id]) }}" class="group" data-aos="zoom-in-up" data-aos-delay="{{ $loop->index * 100 }}">
                             <article class="h-full flex flex-col bg-white rounded-[2.5rem] border border-[#F0DECB] overflow-hidden shadow-sm hover:shadow-[0_20px_50px_rgba(194,107,23,0.15)] transition-all duration-500 hover:-translate-y-2">
                                 <div class="h-64 overflow-hidden relative">
                                     @if($menu->image)

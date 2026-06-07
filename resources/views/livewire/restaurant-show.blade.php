@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A]">
     <div class="mx-auto max-w-7xl px-6 py-8">
-        <header class="relative overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-[0_20px_60px_rgba(194,107,23,0.1)] lg:p-12">
+        <header class="relative overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-[0_20px_60px_rgba(194,107,23,0.1)] lg:p-12" data-aos="fade-down">
             <div class="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-center">
                 <div class="h-64 w-full overflow-hidden rounded-[2rem] bg-[#F4E6D9] lg:h-80 lg:w-[450px] shrink-0">
                     @if($restaurant->image)
@@ -14,7 +14,7 @@
 
                 <div class="flex-1 space-y-6">
                     <div class="space-y-2">
-                        <p class="text-[10px] uppercase tracking-[0.3em] text-[#AB7B45] font-bold">{{ $restaurant->category->name }} • {{ $restaurant->city->name }}</p>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-[#AB7B45] font-bold">{{ $restaurant->category->name ?? '' }} {{ $restaurant->city ? '• ' . $restaurant->city->name : '' }}</p>
                         <h1 class="text-4xl font-bold tracking-tight text-[#1D1D1B] sm:text-6xl">{{ $restaurant->name }}</h1>
                     </div>
 
@@ -43,10 +43,10 @@
 
         @if($restaurant->facilities)
             <section class="mt-16">
-                <h2 class="text-2xl font-bold text-[#1D1D1B]">Establishment Amenities</h2>
+                <h2 class="text-2xl font-bold text-[#1D1D1B]" data-aos="fade-up">Establishment Amenities</h2>
                 <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach($restaurant->facilities as $category => $items)
-                        <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-[#F0DECB]">
+                        <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-[#F0DECB]" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                             <h3 class="mb-6 flex items-center gap-2 text-xs uppercase tracking-widest text-[#AB7B45] font-bold">
                                 <span class="text-xl">
                                     @if($category == 'Accessibility') ♿ @elseif($category == 'Amenities') ✨ @else 🅿️ @endif
@@ -72,7 +72,7 @@
         @endif
 
         <section class="mt-16">
-            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between" data-aos="fade-right">
                 <div>
                     <h2 class="text-3xl font-semibold text-[#1D1D1B]">Menu Selection</h2>
                 </div>
@@ -85,7 +85,7 @@
             </div>
 
             @if($highlightedMenu)
-            <div class="mt-10">
+            <div class="mt-10" data-aos="zoom-in">
                 <p class="text-[10px] uppercase tracking-[0.3em] text-[#B25C18] font-bold mb-6">Your Highlighted Selection</p>
                 <article class="overflow-hidden rounded-[2.5rem] border-2 border-[#B25C18] bg-[#FFF9F4] shadow-xl flex flex-col lg:flex-row">
                     <div class="h-64 w-full lg:h-80 lg:w-[400px] flex-shrink-0 overflow-hidden">
@@ -125,7 +125,7 @@
                     @if(isset($highlightId) && $highlightId == $item->id)
                         @continue
                     @endif
-                    <article class="overflow-hidden rounded-[2rem] border border-[#F0DECB] bg-white shadow-sm">
+                    <article class="overflow-hidden rounded-[2rem] border border-[#F0DECB] bg-white shadow-sm" data-aos="zoom-in-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="h-56 overflow-hidden rounded-t-[2rem] bg-[#F4E6D9]">
                             @if($item->image)
                                 <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="h-full w-full object-cover" />
@@ -158,7 +158,7 @@
             </div>
         </section>
         <section class="mt-24 mb-20">
-            <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center justify-between mb-10" data-aos="fade-right">
                 <h2 class="text-3xl font-bold text-[#1D1D1B]">Customer Reviews</h2>
                 <div class="flex items-center gap-2 text-[#AB7B45] font-bold">
                     <span class="text-2xl">⭐</span>
@@ -169,7 +169,7 @@
 
             <div class="grid gap-8 md:grid-cols-2">
                 @forelse($restaurant->reviews as $review)
-                <div class="bg-white rounded-[2rem] p-8 border border-zinc-100 shadow-sm relative group overflow-hidden">
+                <div class="bg-white rounded-[2rem] p-8 border border-zinc-100 shadow-sm relative group overflow-hidden" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="absolute top-0 right-0 p-8">
                         <div class="flex gap-0.5">
                             @for($i = 1; $i <= 5; $i++)

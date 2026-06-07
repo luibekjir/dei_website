@@ -1,7 +1,7 @@
 <div>
     <div class="min-h-screen bg-[#FEF6ED] text-[#1A1A1A]">
         <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-            <header class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-16">
+            <header class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-16" data-aos="fade-down">
                 <div>
                     <p class="text-[10px] uppercase tracking-[0.4em] text-[#AB7B45] font-bold">Secure Checkout</p>
                     <h1 class="mt-3 text-5xl font-bold tracking-tight text-[#1D1D1B] sm:text-7xl">Review Your <br/><span class="text-[#B25C18]">Culinary Order</span></h1>
@@ -14,11 +14,11 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 items-start">
                 <div class="space-y-12">
-                    <section>
+                    <section data-aos="fade-right">
                         <h2 class="text-2xl font-bold text-[#1D1D1B] mb-8">Selected Delicacies</h2>
                         <div class="space-y-6">
                             @foreach($items as $index => $item)
-                            <article class="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6 bg-white rounded-[2.5rem] border border-[#F0DECB] shadow-sm transition hover:shadow-md">
+                            <article class="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6 bg-white rounded-[2.5rem] border border-[#F0DECB] shadow-sm transition hover:shadow-md" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                                 <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-[1.5rem] bg-[#F4E6D9]">
                                     @if(isset($item['image']))
                                         <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover" />
@@ -53,7 +53,7 @@
                         </div>
                     </section>
 
-                    <section class="space-y-8">
+                    <section class="space-y-8" data-aos="fade-up">
                         <div class="flex items-center gap-4">
                             <div class="h-12 w-12 rounded-2xl bg-orange-50 flex items-center justify-center text-xl">
                                 {{ $orderType === 'delivery' ? '🚚' : '🏪' }}
@@ -132,7 +132,7 @@
                     </section>
                 </div>
 
-                <aside class="lg:sticky lg:top-10 space-y-6">
+                <aside class="lg:sticky lg:top-10 space-y-6" data-aos="fade-left">
                     <div class="bg-white rounded-[2.5rem] border border-[#F0DECB] p-8 shadow-sm">
                         <h2 class="text-xl font-bold text-[#1D1D1B] mb-8">Payment Summary</h2>
                         

@@ -13,6 +13,7 @@ class ExploreController extends Controller
     {
         $query = MenuItem::with(['restaurant.category', 'city']);
         $query = $this->applyFilters($request, $query);
+        $query->orderByDesc('id');
 
         $menus = $query->get();
         $categories = Category::all();
